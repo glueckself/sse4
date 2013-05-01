@@ -1,0 +1,8 @@
+Doku zu C-Programm "isPalindrom":
+
+Das Kommandozeilentool isPalindrom nimmt einen String von stdIn und überprüft ob ein Palindrom vorliegt. 
+
+Usage: isPalindrom [-1]
+
+Installation: 
+	- make im Ordner ausführen.
