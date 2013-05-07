@@ -1,0 +1,46 @@
+<project name="ExploitableBlog" default="deploy">
+	<property file="config.properties"/>
+	<property name="webapp.dist" value="dist"/>
+	<property name="webapp.war" value="Blog.war"/>
+	<property name="build.dir" value="build"/>
+
+	<target name="compile">
+		<mkdir dir="${build.dir}/classes" />
+		<javac srcdir="src" destdir="${build.dir}/classes">
+			<classpath>
+            			<fileset dir="${tomcat.home}/lib" includes="*.jar" />
+        		</classpath>
+		</javac>
+	</target>
+
+	<target name="build" depends="compile">
+		<mkdir dir="${webapp.dist}" />
+		<war destfile="${webapp.dist}/${webapp.war}" webxml="WebContent/WEB-INF/web.xml">
+			<fileset dir="WebContent" />
+			<lib dir="WebContent/WEB-INF/lib" />
+			<classes dir="${build.dir}/classes" />
+		</war>
+	</target>
+
+	<target name="deploy" depends="build" if="tomcat.home">
+		<unwar src="${webapp.dist}/${webapp.war}" dest="${tomcat.home}/webapps/${webapp.name}" />
+	</target>
+	<target name="clean">
+		<delete dir="${webapp.dist}" />
+		<delete dir="${build.dir}" />
+	</target>
+
+<target name="start" depends="deploy">
+    <java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+        <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+    </java>
+</target>
+
+<target name="stop">
+    <java jar="${tomcat.home}/bin/bootstrap.jar" fork="true">
+        <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+        <arg line="stop"/>
+    </java>
+</target>
+
+</project>
