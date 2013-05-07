@@ -130,10 +130,8 @@ int main (int argc, char **argv)
 	
 	while (1) {
 		fprintf(stdout, "Bitte ihre Eingabe : ");
-		if(fgets(input, MAX, stdin) == NULL)
+		if(fgets(input, MAX-1, stdin) == NULL)
           return EXIT_FAILURE;
-		
-		input[MAX-1] = '\0';
 		
 		strncpy(stringA, input, MAX);
 		toFree=stringB = strip(stringA);
