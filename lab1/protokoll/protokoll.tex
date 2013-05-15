@@ -1,6 +1,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-% Institut für Rechnergestuetzte Automation
+% Institut f"ur Rechnergestuetzte Automation
 % Forschungsgruppe Industrial Software
 % Arbeitsgruppe ESSE
 % http://security.inso.tuwien.ac.at/
@@ -32,23 +32,23 @@
 \newcommand{\semester}{SS 2013}
 
 % Student data in Lab0 or first student of group in Lab1
-\newcommand{\studentAName}{Srdjan Markovic}
-\newcommand{\studentAMatrnr}{1025857}
-\newcommand{\studentAEmail}{e1025857@student.tuwien.ac.at}
+\newcommand{\studentDName}{Srdjan Markovic}
+\newcommand{\studentDMatrnr}{1025857}
+\newcommand{\studentDEmail}{e1025857@student.tuwien.ac.at}
 
 % second student of group in Lab1, for Lab0 you may leave it unchanged
 \newcommand{\studentBName}{Julian Großhauser}
-\newcommand{\studentBMatrnr}{1234567}
-\newcommand{\studentBEmail}{e1234567@student.tuwien.ac.at}
+\newcommand{\studentBMatrnr}{1026751}
+\newcommand{\studentBEmail}{e1026751@student.tuwien.ac.at}
 
 % second student of group in Lab1, for Lab0 you may leave it unchanged
-\newcommand{\studentCName}{Bruno Mustermann}
-\newcommand{\studentCMatrnr}{0815001}
-\newcommand{\studentCEmail}{e0815001@student.tuwien.ac.at}
+\newcommand{\studentCName}{Bruno Bajtela}
+\newcommand{\studentCMatrnr}{---EINTRAGEN---}
+\newcommand{\studentCEmail}{bruno.bajtela@tuwien.ac.at}
 
-\newcommand{\studentDName}{Aleksandar Mustermann}
-\newcommand{\studentDMatrnr}{0815001}
-\newcommand{\studentDEmail}{e0815001@student.tuwien.ac.at}
+\newcommand{\studentAName}{Aleksandar Sibincic}
+\newcommand{\studentAMatrnr}{0727895}
+\newcommand{\studentAEmail}{e0727895@student.tuwien.ac.at}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DO NOT CHANGE THE FOLLOWING PART
@@ -70,16 +70,7 @@
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{Ueberschrift 1}
-
-\subsection{Hinweise}
-\emph{Hinweise:}
-\begin{itemize}
-    \item Setzen sie alle Variablen nach \emph{FOR STUDENTS} in der .tex File
-    \item Ersetzen sie die Platzhalter für ihre Namen und MatNr.
-    \item Löschen sie diese Sektion über Hinweise und die folgenden Beispiel-Kapitel
-    \item Achten sie auf geforderte Formate und Anforderungen an die Dateinamen
-\end{itemize}
+\section{Lab1a}
 
 \subsection{Sub-Ueberschrift 1}
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
@@ -87,16 +78,50 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 \subsection{Sub-Ueberschrift 2}
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
 
-\section{Ueberschrift 2}
+\section{Lab1b}
 
-\subsection{Sub-Ueberschrift 1}
+\subsection{Lab1}
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
 
 \subsection{Sub-Ueberschrift 2}
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. 
 
 \subsection{Sub-Ueberschrift 3}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
+Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.
+
+\section{Lab1c} 
+\subsection{Lab1c - app0}
+Im App0 wurden folgende Vulnerabilities gefunden:
+\begin{description}
+  \item[Integer und Heap-Buffer-Overflow] \hfill \\
+    Der Integer-Overflow tritt Aufgrund der Subtraktion von -1 von einem size\_t-Typ mit dem Wert 0. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
+    Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
+    Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
+    Diese Vulnerability kann f"ur ein DOS genutzt werden.
+    
+  \item[Format-String] \hfill \\
+  In der Funktion outprint (Zeile 54) wird der vom User eingegebene String als Format-String an printf "ubergeben.
+    Um diese Vulnerability ausnutzen zu k"onnen, sind folgende Schritte notwendig:
+    \begin{itemize}
+        \item Format-Offset des Buffers bestimmen (da eventuell andere libc-Versionen eine andere Anzahl von Variablen in den printf-Funktionen haben.
+        \item Zur CPU-Archtektur passenden Format-Offset zum oberem addieren, um die Adresse einer Stack-Frame zu erhalten.
+        \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur RIP auf dem Stack bestimmen.
+        \item Durch den Format-Offset und den Stack-Frame-Pointer l"asst sich die Adresse des input-Buffers bestimmen.
+        \item Aus diesen Daten kann der String f"ur den Angriff generiert werden:\\
+        \begin{lstlisting}
+${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset}\$n
+        \end{lstlisting}
+    \end{itemize}
+    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der oberige String ist in einer bash-"ahnlichen Syntax
+    
+    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).
+    \item[Memory Leak]
+    Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).
+\end{description}
+
+\subsection{Lab1c - app1}
+
+\subsection{Lab1c - app2}
 
 \section{Beispiele}
 
@@ -104,9 +129,9 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 Es folgen einige Beispiele wie Sourcecode in diesem Dokument formatiert und referenziert werden kann
 (\hyperref[code:beispiel1]{siehe Listing~\ref*{code:beispiel1} auf Seite~\pageref*{code:beispiel1}} und \hyperref[code:beispiel2]{siehe Listing~\ref*{code:beispiel2} auf Seite~\pageref*{code:beispiel2}}).
 
-Ebenso können kurzer Code oder kurze Befehle direkt in der Zeile in einem \lstinline{lstinline Block} mit typengleicher Schrift formatiert werden.
+Ebenso k"onnen kurzer Code oder kurze Befehle direkt in der Zeile in einem \lstinline{lstinline Block} mit typengleicher Schrift formatiert werden.
 
-\lstinputlisting[caption=Example C/C++ file,label=code:beispiel1,style=c]{example.c}
+%\lstinputlisting[caption=Example C/C++ file,label=code:beispiel1,style=c]{example.c}
 
 \begin{lstlisting}[caption=Example bash script,label=code:beispiel2,style=simple]
 #!/bin/bash

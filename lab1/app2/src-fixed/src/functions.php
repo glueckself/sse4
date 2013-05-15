@@ -84,10 +84,12 @@
 
 			$time = time();
             $nr = $this->get_max_lastnr() + 1;
-            /* FIXED: predictable session id.
-			   old: $sessionid = md5($time."|".$this->data["username"]);
+            /*FIXED: predictable session id.
+              old: $sessionid = md5($time."|".$this->data["username"]);
+              Actually, this should be fixed by partially rewriting the Application and using PHPs session system
+              (session_start, session_unset, session_id, ...)
              */
-            $sessionid = rand();
+            $sessionid = md5(rand());
 			
 			$sql = 'UPDATE users SET sessionid = "'.$sessionid.'", logintime = "'.$time.'", lastnr = "'.$nr.'"
 				WHERE username = "'.mysql_real_escape_string($this->data["username"]).'";';
