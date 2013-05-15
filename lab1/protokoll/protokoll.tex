@@ -106,7 +106,7 @@ Um den privaten Schlüssel für Benutzer walter zu bekommen, haben wir folgenden
 
 \subsection{Schwachstellen und Angriff}
 Unter \url{http://tomcat.apache.org/security-6.html} gibt es eine Liste der Tomcat-6.X.X Schwachstellen. Eine Liste der bekannten Schwachstellen für Tomcat-6.0.16 ist unter \\ \url{http://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-887/version_id-56605/Apache-Tomcat-6.0.16.html} zu finden. Die einzige hier gelistete Schwachstelle, die es einem als Angreifer ermöglicht beliebige Dateien zu lesen, ist Remote UTF-8 Directory Traversal. Eine genaue Beschreibung und Spezifikation findet man unter \url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2938}. \\ 
-Dieses Problem tritt auf, wenn 'allowLinking' und 'URIencoding=UTF-8' im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis zB. die Tiefe 3 hat (z.B. /usr/local/wwwroot), kann man auf folgende Weise auf beliebige Daten zugreifen: \\ http://www.target.com/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/foo/bar   \\Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder 'allowLinking' zu deaktivieren oder 'URIencoding' nicht auf UTF-8 zu setzen. Noch besser wäre ein Upgrade auf eine neuere Version des Tomcat Server. In der Version 6.0.18 wurde dieses Problem behoben. 
+Dieses Problem tritt auf, wenn \"allowLinking\" und \"URIencoding=UTF-8\" im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis zB. die Tiefe 3 hat (z.B. /usr/local/wwwroot), kann man auf folgende Weise auf beliebige Daten zugreifen: \\ http://www.target.com/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/foo/bar   \\Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder \"allowLinking\" zu deaktivieren oder \"URIencoding\" nicht auf UTF-8 zu setzen. Noch besser wäre ein Upgrade auf eine neuere Version des Tomcat Server. In der Version 6.0.18 wurde dieses Problem behoben. 
 
 
 \section{Lab1b}
@@ -128,7 +128,9 @@ Im App0 wurden folgende Vulnerabilities gefunden:
     Der Integer-Overflow tritt Aufgrund der Subtraktion von -1 von einem size\_t-Typ mit dem Wert 0. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
     Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
     Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
-    Diese Vulnerability kann f"ur ein DOS genutzt werden.
+    Diese Vulnerability kann f"ur ein DOS genutzt werden.\newline
+    Eine solche Heap Overflow Schwachstelle wurde in Oracle Java JRE & JDK 7u7 und vorherigen Versionen gefunden. Die Schwachstelle befindet sich in \"t2k.dll\", genauer in \"maxCountPoint\" eines Fonts, und k"onnte von einem Angreifer durch eine spezielle Webseite ausgen"utzt werden. Diese Schwachstelle ist kritisch und hat den h"ochsten CVSS Score, n"amlich 10.\newline
+    Quelle: \url{http://seclists.org/bugtraq/2012/Oct/119}
     
   \item[Format-String] \hfill \\
   In der Funktion outprint (Zeile 54) wird der vom User eingegebene String als Format-String an printf "ubergeben.
@@ -138,14 +140,15 @@ Im App0 wurden folgende Vulnerabilities gefunden:
         \item Zur CPU-Archtektur passenden Format-Offset zum oberem addieren, um die Adresse einer Stack-Frame zu erhalten.
         \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur RIP auf dem Stack bestimmen.
         \item Durch den Format-Offset und den Stack-Frame-Pointer l"asst sich die Adresse des input-Buffers bestimmen.
-        \item Aus diesen Daten kann der String f"ur den Angriff generiert werden:\\
+        \item Aus diesen Daten kann der String für den Angriff generiert werden:\\
         \begin{lstlisting}
 ${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset}\$n
         \end{lstlisting}
     \end{itemize}
     Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der oberige String ist in einer bash-"ahnlichen Syntax
     
-    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).
+    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).\newline
+
     \item[Memory Leak]
     Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).
 \end{description}
