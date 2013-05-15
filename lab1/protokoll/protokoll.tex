@@ -112,7 +112,15 @@ Dieses Problem tritt auf, wenn ``allowLinking'' und ``URIencoding=UTF-8'' im Tom
 \section{Lab1b}
 
 \subsection{Vorgehensweise}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
+Nach der Herstellung der SSH-Verbindung wurden zun"achst die lokalen Netzverbindungen mit \texttt{ip addr} ermittelt, wozu auch die IPv6-Adresse mitsamt dem Netzpr"afix geh"orte. Die daraus ersichtlichen Subnetze wurden dann mit \texttt{nmap -sP <subnet>} auf aktive Hosts untersucht, wobei jeder Host anschließend mit \texttt{nmap -sV <host>} auf offene Ports untersucht und der Hostname ermittelt wurde.
+
+Die MAC-Adresse der direkt im selben Subnet befindlichen Hosts konnte aus dem ARP-Cahce mittels \texttt{ip neighbor} ermittelt werden.
+
+Anschließend wurden die angegebenen Subnetze ebenfalls gescannt, wobei die Netztopologie mittels \texttt{traceroute <host>} zu allen Hosts, die in "uber Router erreichbaren Subnetzen lagen, ermittelt. Hierbei fielen einige Inkonsistenzen auf, die im Netzwerkplan dargestellt werden - obwohl Hosts laut ihrer IP-Adresse in einem bestimmten Subnet liegen sollten, welches nur "uber eine Zwischenstation erreichbar war, lieferte \texttt{traceroute} eine direkte Verbindung bzw. eine Verbindung "uber weniger Zwischenstationen als erwartet - daf"ur konnte keine Erkl"arung gefunden werden.
+
+Zum Scan der IPv6-Bereiche wurde ein kleines Skript verwendet, welches "uber die m"oglichen Adressen iterierte und diese \texttt{nmap} zum scan "ubertrug - sp"atere Versionen von \texttt{nmap} k"onnen aber bereits IPv6-Bereiche scannen.
+
+Als Erkl"arung f"ür unterschiedliche Antwortzeiten k"onnte sowohl eine "Uberlastung des einzelnen Hosts, als auch eine Anbindung per VPN in das lokale Netz herangezogen werden, wodurch dann durch die erh"ohte Umlaufzeit Verz"ogerungen auftreten k"onnen.
 
 \subsection{Gefundene Systeme}
 Im Bereich 10.12.0.0/24 wurden keine erreichbaren Hosts gefunden.\\
