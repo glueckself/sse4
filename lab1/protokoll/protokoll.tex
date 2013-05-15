@@ -145,12 +145,14 @@ Im App0 wurden folgende Vulnerabilities gefunden:
 ${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset}\$n
         \end{lstlisting}
     \end{itemize}
-    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der oberige String ist in einer bash-"ahnlichen Syntax
+    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der obere String ist in einer bash-"ahnlichen Syntax
     
     Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).\newline
 
     \item[Memory Leak]
-    Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).
+    Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).\newline
+    Im SNMP Module des Cisco IOS XR wurde eine Schwachstelle entdeckt, die es einem Angreifer erm"oglicht durch speziell angefertige SNMP Packete einen Memory Leak auszul"osen. Die Schwachstelle entsteht dadurch, dass der Input nicht genug "Uberpr"uft wird. Der SNMP Prozess startet neu, sobald der ihm zugeteilte Speicher voll ist. Diese Schwachstelle wurde als eher gering gef"ahrlich eingestuft.\newline
+    Quelle: \url{http://tools.cisco.com/security/center/content/CiscoSecurityNotice/CVE-2013-1216}
 \end{description}
 
 \subsection{Lab1c - app1}
