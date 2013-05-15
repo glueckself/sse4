@@ -340,36 +340,68 @@ Im App0 wurden folgende Vulnerabilities gefunden:
 var=malloc(10);
 var[11]=5;
 	\end{lstlisting}
-	Dabei ist es möglich, Funktionspointer oder andere wichtige Datenstrukturen am Heap eines Programmes zu überschreiben um dadurch entweder die Kontrolle zu übernehmen, oder das Programm zum absturz zu bringen.
+	Dabei ist es möglich, Funktionspointer oder andere wichtige Datenstrukturen am Heap eines Programmes zu überschreiben um dadurch entweder die Kontrolle zu übernehmen, oder das Programm zum absturz zu bringen.\newline
 	
-	
-  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 (Ergebnis der strlen-Funktion subtrahiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
+  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 (Ergebnis der strlen-Funktion) subtrahiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
     Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
-    Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
+    Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).\newline
+    Vorgehensweise:
+    \begin{itemize}
+    \item Eine leere Eingabe machen (,,Enter'' dr"ucken)
+    \end {itemize}
     Diese Vulnerability kann in dem Fall f"ur ein DOS genutzt werden.\\
+    Diese Vulnerability wird mit dem Script ,,heap\_int\_overflow.sh'' ausgenutzt.\\
     \\
     Eine Heap Overflow Schwachstelle wurde in Oracle Java JRE \& JDK 7u7 und vorherigen Versionen gefunden. Die Schwachstelle befindet sich in ``t2k.dll'', genauer in ``maxCountPoint'' eines Fonts, und k"onnte von einem Angreifer durch eine spezielle Webseite ausgen"utzt werden. Diese Schwachstelle ist kritisch und hat den h"ochsten CVSS Score, n"amlich 10.\newline
     Quelle: \url{http://seclists.org/bugtraq/2012/Oct/119}
     
   \item[Format-String] \hfill \\
-  In der Funktion outprint (Zeile 54) wird der vom User eingegebene String als Format-String an printf "ubergeben.
-    Um diese Vulnerability ausnutzen zu k"onnen, sind folgende Schritte notwendig:
+  Funktionen der printf-Familie verwenden Format-Strings zur Steuerungs ihres verhaltens. Werden dabei spezielle Sequenzen, wie z.B. \%u, \%s oder \%n vorgefunden, so nimmt der Code an, dass entsprechende Argumente "ubergeben worden sind (und daher am Stack liegen). Ist nun der Format-String vom Benutzer beeinflussbar, so kann dadurch ein nicht vorhergesehenes Verhalten der Funktionen ausgel"ost, und damit der Programmablauf ver"andert werden.\newline
+  In der Funktion outprint (main.c:56, main.c:60) wird der vom User eingegebene String als Format-String an printf "ubergeben.\newline
+  Vorgehensweise (DOS/PoC):
+  \begin{itemize}
+  \item Den String ,,\%100\$s'' "uberpr"ufen lassen (ohne Anf"uhrungszeichen eingeben)
+  \end{itemize}
+  Da das Program nun wahrscheinlich abst"urzt (eventuell muss der Parameter 100 ge"andert werden), kann man davon ausgehen, dass eine Format-String-Vulnerability vorliegt (der String sollte nicht lang genug f"ur einen Buffer-Overflow sein).\newline
+  Durch die \%s und \%n Sequenz ist es m"oglich, an beliebige Stellen im Speicher zu lesen bzw. schreiben.\newline
+    Um diese Vulnerability zum Ausf"uhren vom Shellcode nutzen zu k"onnen, sind folgende Schritte notwendig:
     \begin{itemize}
-        \item Format-Offset des Buffers bestimmen (da eventuell andere libc-Versionen eine andere Anzahl von Variablen in den printf-Funktionen haben.
+        \item Format-Offset bestimmen (=,,Wie viele Bytes m"ussen vom Stack gepopt werden, bevor der der Input-Buffer erreicht wird'')
         \item Zur CPU-Archtektur passenden Format-Offset zum oberem addieren, um die Adresse einer Stack-Frame zu erhalten.
-        \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur RIP auf dem Stack bestimmen.
+        \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur den Return-Pointer auf dem Stack bestimmen.
         \item Durch den Format-Offset und den Stack-Frame-Pointer l"asst sich die Adresse des input-Buffers bestimmen.
         \item Aus diesen Daten kann der String für den Angriff generiert werden:\\
         \begin{lstlisting}
-${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset}\$n
+${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge+$offsetZumShellCode))%${formatOffset}\$n${shellCode}
         \end{lstlisting}
     \end{itemize}
-    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der obere String ist in einer bash-"ahnlichen Syntax
+    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der obere String ist in einer bash-"ahnlichen Syntax.\newline
+    Der geschriebene Wert befindet sich im zweiten Teil des Strings. Ohne Shellcode, kann man dadurch einen Wert auf eine Adresse schreiben.\newline
+    Beispielsweise schreibt der String
+    \begin{lstlisting}
+aaaaaaaa%992u%18$n
+	 \end{lstlisting}
+	 den Wert 1000 an die Adresse 0x6161616161616161.\newline
+    Diese Vulnerability wird durch das Skript ,,format\_string.sh'' ausgenutzt. Dabei kann man eine Addresse und einen Wert angeben, der dorthin geschrieben werden soll.\newline
+    Da der Input-Buffer nur 41 Byte groß ist, werden in ,,format_string.sh'' die Escape-Sequenzen nicht direkt im String gehalten, sondern bereits evaluiert, so dass nicht-ASCII-Zeichen an das Program "ubergeben werden m"ussen.
     
-    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).\newline
-
+    Format-String-Vulnerabilities wurden beispielsweise im Exim Daemon, im Linux Kernel und im Windows Printer Spooler gefunden. Vor allem die Windows Printer Spooler ist sehr gef"ahrlich, da dieser Dienst in der Standardkonfiguration von Windows-System aktiv ist.
+    Quellen:
+    \begin{itemize}
+    \item \url{http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2012-1851}
+    \item \url{http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2011-1764}
+    \item \url{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-1848}
+\end{itemize}
     \item[Memory Leak]
-    Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).\newline
+    Ein Memory-Leak ist ein Speicherbereich auf den das Programm keinen Zugriff mehr hat. Memory-Leaks können beispielsweise dadurch entstehen, dass Pointer auf allozierten Speicher "uberschrieben werden.
+    Da der in strip allozierte Speicher (main.c:15) nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu benutzen (main.c:18), terminiert (DOS-Angriff).\newline
+    
+Vorgehensweise:
+\begin{itemize}
+	\item Dem Programm wiederholend (viele Wiederholungen notwendig) neue Strings eingeben.
+\end{itemize}
+Anm.: es empfiehlt sich, eine Schleife zu verwenden. Siehe memory\_leak.sh.\newline
+    
     Im SNMP Module des Cisco IOS XR wurde eine Schwachstelle entdeckt, die es einem Angreifer erm"oglicht durch speziell angefertige SNMP Packete einen Memory Leak auszul"osen. Die Schwachstelle entsteht dadurch, dass der Input nicht genug "Uberpr"uft wird. Der SNMP Prozess startet neu, sobald der ihm zugeteilte Speicher voll ist. Diese Schwachstelle wurde als eher gering gef"ahrlich eingestuft.\newline
     Quelle: \url{http://tools.cisco.com/security/center/content/CiscoSecurityNotice/CVE-2013-1216}
 \end{description}
@@ -379,7 +411,7 @@ Beim Cross-Site-Scripting (XSS) wird in eine bestehende Seite ein Javascript-Cod
 Es gibt Stored- und Reflected-XSS.
 Beispielseingabe: <script type="text/javascript">alert("Das ist XSS");</script>.
 
-Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend, da nur der Tag "< script >" gefiltert wird, aber nicht beispielsweise "<script>" (---FILENAME---).
+Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend (siehe ScriptTagValidator.java:9).
 
 Triggern:
 Vorraussetzung: Laufende Web-Applikation, Bekannte IP-Adresse und Port der Web-Applikation.
