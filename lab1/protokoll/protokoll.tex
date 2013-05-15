@@ -341,7 +341,7 @@ aaaaaaaa%992u%18$n
 	 \end{lstlisting}
 	 den Wert 1000 an die Adresse 0x6161616161616161.\newline
     Diese Vulnerability wird durch das Skript ,,format\_string.sh'' ausgenutzt. Dabei kann man eine Addresse und einen Wert angeben, der dorthin geschrieben werden soll.\newline
-    Da der Input-Buffer nur 41 Byte groß ist, werden in ,,format_string.sh'' die Escape-Sequenzen nicht direkt im String gehalten, sondern bereits evaluiert, so dass nicht-ASCII-Zeichen an das Program "ubergeben werden m"ussen.
+    Da der Input-Buffer nur 41 Byte groß ist, werden in ,,format\_string.sh'' die Escape-Sequenzen nicht direkt im String gehalten, sondern bereits evaluiert, so dass nicht-ASCII-Zeichen an das Program "ubergeben werden m"ussen.
     
     Format-String-Vulnerabilities wurden beispielsweise im Exim Daemon, im Linux Kernel und im Windows Printer Spooler gefunden. Vor allem die Windows Printer Spooler ist sehr gef"ahrlich, da dieser Dienst in der Standardkonfiguration von Windows-System aktiv ist.
     Quellen:
