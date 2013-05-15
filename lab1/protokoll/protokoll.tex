@@ -275,6 +275,10 @@ DNS Hostname: kerberos.dmz.vienna.essecorp.invalid\\
 Offene Ports und Services: Alle Ports geschlossen\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
+
+\subsection{Netzwerkplan}
+\includegraphics[width=\textwidth]{./imgs/netzwerkplan.png}
+
 \section{Lab1c} 
 \subsection{Lab1c - app0}
 Im App0 wurden folgende Vulnerabilities gefunden:
@@ -333,7 +337,7 @@ Vorraussetzung: Laufende Web-Applikation, Bekannte IP-Adresse und Port der Web-A
 Vorgehensweise:
 \begin{itemize}
 	\item Seite "offnen um das Session-Cookie zu bekommen
-	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt "author=\$beliebig\&content=\$scriptCode" und dem vorher erwähntem Cookie schicken.
+	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt ``author=\$beliebig\&content=\$scriptCode'' und dem vorher erwähntem Cookie schicken.
 \end{itemize}
 
 Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.
@@ -379,10 +383,10 @@ Ebenso k"onnen kurzer Code oder kurze Befehle direkt in der Zeile in einem \lsti
 echo "Bash version ${BASH_VERSION}..."
 for i in {0..10..2}
   do
-     echo "Welcome $i times"
+     echo ``Welcome $i times''
  done
 
-echo "some very very very very very very very very very very very very very very very very very very very very long string"
+echo ``some very very very very very very very very very very very very very very very very very very very very long string''s
 
 exit 0;
 \end{lstlisting}
