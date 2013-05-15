@@ -86,6 +86,15 @@ Host kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da) is u
 nmap -sV 192.168.98.1
 All 1000 scanned ports on omega.local.vienna.essecorp.invalid (192.168.98.1) are closed
 
+walter@tomcat:~$ nmap -sV 192.168.20.254
+Interesting ports on 192.168.20.254:
+Not shown: 998 closed ports
+PORT    STATE SERVICE VERSION
+22/tcp  open  ssh     OpenSSH 5.5p1 Debian 6+squeeze1 (protocol 2.0)
+873/tcp open  rsync?
+Service Info: OS: Linux
+
+
 
 walter@tomcat:~$ nmap -sV 192.168.98.10
 Interesting ports on alpha.local.vienna.essecorp.invalid (192.168.98.10):
@@ -167,6 +176,12 @@ PORT   STATE SERVICE VERSION
 walter@tomcat:~$ nmap -sV 172.16.2.253
 All 1000 scanned ports on lyra.dmz.vienna.essecorp.invalid (172.16.2.253) are closed
 
+walter@tomcat:~$ nmap -sV fdcb:c447:e9d2:3553:1002::fe -6
+All 1000 scanned ports on kerberos.dmz.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1002::fe) are closed
+
+walter@tomcat:~$ nmap -sV -6 fdcb:c447:e9d2:3553:1003::da
+All 1000 scanned ports on kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da) are closed
+
 
 walter@tomcat:/home$ nmap -sV fdcb:c447:e9d2:3553:1003::7f -6
 Interesting ports on athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f):
@@ -200,4 +215,8 @@ traceroute to athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7
  2  kerberos.dmz.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1002::fe)  0.501 ms  0.481 ms  0.464 ms
  3  athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f)  118.196 ms  132.601 ms  134.156 ms
 
+walter@tomcat:~$ traceroute kerberos.extra.atlanta.essecorp.invalid
+traceroute to kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da), 30 hops max, 80 byte packets
+ 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.188 ms  0.159 ms  0.166 ms
+ 2  kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da)  0.505 ms  0.484 ms  0.468 ms
 
