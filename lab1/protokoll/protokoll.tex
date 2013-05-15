@@ -133,7 +133,8 @@ var[11]=5;
 	\end{lstlisting}
 	Dabei ist es möglich, Funktionspointer oder andere wichtige Datenstrukturen am Heap eines Programmes zu überschreiben um dadurch entweder die Kontrolle zu übernehmen, oder das Programm zum absturz zu bringen.
 	
-  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 subtrachiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
+	
+  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 (Ergebnis der strlen-Funktion subtrahiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
     Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
     Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
     Diese Vulnerability kann in dem Fall f"ur ein DOS genutzt werden.
@@ -164,6 +165,24 @@ ${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset
 \end{description}
 
 \subsection{Lab1c - app1}
+Beim Cross-Site-Scripting (XSS) wird in eine bestehende Seite ein Javascript-Code injiziert, wenn die Eingabefelder nicht serverseitig richtig validiert werden.\newline
+Es gibt Stored- und Reflected-XSS.
+Beispielseingabe: <script type="text/javascript">alert("Das ist XSS");</script>.
+
+Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend, da nur der Tag "< script >" gefiltert wird, aber nicht beispielsweise "<script>" (---FILENAME---).
+
+Triggern:
+Vorraussetzung: Laufende Web-Applikation, Bekannte IP-Adresse und Port der Web-Applikation.
+
+Vorgehensweise:
+\begin{itemize}
+	\item Seite "offnen um das Session-Cookie zu bekommen
+	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt "author=\$beliebig\&content=\$scriptCode" und dem vorher erwähntem Cookie schicken.
+\end{itemize}
+
+Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.
+
+Anmerkung: Diese Vulnerability l"asst sich grunds"atzlich auch nutzen um beliebigen XHTML-Code einzuf"ugen.
 
 \subsection{Lab1c - app2}
 
