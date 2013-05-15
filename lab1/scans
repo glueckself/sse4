@@ -36,8 +36,8 @@ walter@tomcat:~$ ip addr
 walter@tomcat:~$ nmap -sP 192.168.20.0/24
 
 Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 20:32 CEST
-Host 192.168.20.100 is up (0.000067s latency).
-Host 192.168.20.254 is up (0.00021s latency).
+Host 192.168.20.100 is up (0.000067s latency). 00:1b:d7:12:bc:51
+Host 192.168.20.254 is up (0.00021s latency). 00:e2:aa:21:c5:d1
 Nmap done: 256 IP addresses (2 hosts up) scanned in 41.93 seconds
 
 walter@tomcat:~$ nmap -sP 10.12.0.0/24
@@ -46,14 +46,14 @@ Nmap done: 256 IP addresses (0 hosts up) scanned in 104.14 seconds
 walter@tomcat:~$ nmap -sP 192.168.98.0/24
 
 Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 20:42 CEST
-Host omega.local.vienna.essecorp.invalid (192.168.98.1) is up (0.00034s latency).
-Host alpha.local.vienna.essecorp.invalid (192.168.98.10) is up (0.00033s latency).
-Host beta.local.vienna.essecorp.invalid (192.168.98.28) is up (0.0029s latency).
-Host gamma.local.vienna.essecorp.invalid (192.168.98.54) is up (0.0030s latency).
-Host delta.local.vienna.essecorp.invalid (192.168.98.99) is up (0.0024s latency).
-Host tomcat.local.vienna.essecorp.invalid (192.168.98.124) is up (0.00018s latency).
-Host epsilon.local.vienna.essecorp.invalid (192.168.98.201) is up (0.0019s latency).
-Host zeta.local.vienna.essecorp.invalid (192.168.98.202) is up (0.0017s latency).
+Host omega.local.vienna.essecorp.invalid (192.168.98.1) is up (0.00034s latency). 00:1b:d2:0d:84:98
+Host alpha.local.vienna.essecorp.invalid (192.168.98.10) is up (0.00033s latency). 00:1b:d2:d1:1f:85 
+Host beta.local.vienna.essecorp.invalid (192.168.98.28) is up (0.0029s latency). 00:1b:d2:f0:60:59
+Host gamma.local.vienna.essecorp.invalid (192.168.98.54) is up (0.0030s latency). 00:1b:d2:83:b8:41
+Host delta.local.vienna.essecorp.invalid (192.168.98.99) is up (0.0024s latency). 00:1b:d2:a7:8f:d2
+Host tomcat.local.vienna.essecorp.invalid (192.168.98.124) is up (0.00018s latency). 00:1b:d7:12:bc:52
+Host epsilon.local.vienna.essecorp.invalid (192.168.98.201) is up (0.0019s latency). 00:1b:d2:38:ae:b9
+Host zeta.local.vienna.essecorp.invalid (192.168.98.202) is up (0.0017s latency). 00:1b:d2:85:9c:c4
 Nmap done: 256 IP addresses (8 hosts up) scanned in 2.31 seconds
 
 walter@tomcat:~$ nmap -sP 172.16.0.0/22
