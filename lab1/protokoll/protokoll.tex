@@ -143,6 +143,25 @@ ${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset
 
 \subsection{Lab1c - app2}
 
+In app2 wurde eine \textit{weak session id}-L"ucke gefunden, die es einem Angreifer erlauben w"urde, die aktuelle Session-ID eines angemeldeten Nutzers zu erraten bzw. errechnen und an den Server zu senden. Dieser nimmt nun an, mit den tatsächlichen Nutzer zu kommunizieren, da die ID als Geheimnis nur zwischen Server und Nutzer bekannt sein sollte, eine weitere Authentifizierung (z.B. anhand der IP-Adresse) findet nicht statt.
+
+Die Lücke ist in der Datei \texttt{src/functions.php} innerhalb der Funktion \texttt{make\_new\_session()}, in der die Session-ID auf folgende Weise erzeugt wird (Zeile 87): \lstinline{$sessionid = md5($time."|".$this->data["username"]);}
+
+Die Applikation erzeugt aus der aktuellen Unix-Zeit des Servers verkettet mit dem Nutzernamen einen MD5-Hash, der anschließend als Session-ID verwendet wird. Sowohl Server-Zeit als auch Benutzernamen werden allen Besuchern der Applikation auf der Hauptseite angezeigt - ein Angreifer muss nur die Unix-Zeit bei der Anmeldung des Ziel-Benutzers erraten, in dem von der aktuellen Zeit der Wert in Minuten seit der letzten Anmeldung subtrahiert wird (auch diese Information wird unn"otigerweise allen Besuchern gezeigt). Durch Ausprobieren verschiedener Verkettungs-Zeichen, Reihenfolgen und anschließendem Hashing kann der Angreifer letztendlich an die Session ID gelangen und hat Zugriff auf das Profil des Benutzers ohne dass ein Passwort etc. notwendig ist - selbst die Verschlüsselung der Kommunikation zwischen Benutzer und Server ist bei dieser Art des Angriffs wirkungslos.
+
+Konkret müssen also folgende Schritte durchgeführt werden, um die Session eines Nutzers zu kapern:
+
+\begin{itemize}
+\item Aufruf der Hauptseite und Extraktion eines Benutzernamens, der verstrichenen Zeit seit der dessen Anmeldung und die Serverzeit
+\item Rückrechnen der Systemzeit bei der Anmeldung des Benutzers, wobei eine gewisse Toleranz ber"ucksichtigt wird
+\item Schrittweise Erzeugung einer Session-ID durch iterative Auswahl einer Systemzeit aus dem Toleranzintervall verkettet mit \texttt{|} und dem Benutzernamen, sowie anschließendem Hashing mit MD5.
+\item Die erzeugte Session-ID wird dem Server innerhalb einer Anfrage übermittelt - ist sie ung"ultig, erh"alt der Angreifer nur eine Gast-Seite, bei Akzeptanz durch den Server wird die benutzer-spezifische Seite "ubermittelt und der Angriff war erfolgreich.
+\end{itemize}
+
+Um den Fehler zu beheben, kann statt der durch die Applikation selbst implementierten Session-Mechanik auf die als resistent geltenden Implementierungen des Frameworks bzw. der Sprache zur"uckgegriffen werden, in Beispiel von PHP etwa durch die Funktionen \texttt{session\_start}, \texttt{session\_id} etc. Stattdessen kann die Erzeugung der Session-ID auch abgesichert werden, indem die Informationen, die in die Erzeugung einfließen, nur dem betreffenden Nutzer selbst angezeigt werden oder zuf"allige Faktoren einfließen, die ein Angreifer nicht in realistischer Weise erraten kann - beispielsweise durch den Server generierte Pseudozufallszahlen kombiniert mit der Serverzeit. 
+
+In unserer korrigierten Version wird zur Erzeugung der Session-ID ausschließlich eine Zufallszahl verwendet, die anschließend wieder verworfen wird: \lstinline{$sessionid = md5(rand());} Ein Angreifer hat keine M"oglichkeit, von außen an die Zufallszahl zu gelangen und der hohe m"ogliche Wertebereich verhindert ein Erraten der Zahl durch simples Ausprobieren. Zu beachten bei der Verwendung von Pseudo-Zufallszahlen ist eine m"oglichst hohe Entropie bei der Wahl des Initialisierungswertes, da sich s"amtliche erzeugte Zufallszahlen berechnen lassen, wenn ein Angreifer diesen Wert erraten kann.
+
 \section{Beispiele}
 
 \subsection{Source Code formatieren}
