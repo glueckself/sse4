@@ -11,8 +11,14 @@ public class ScriptTagValidator implements ValidatorInterface {
 		if (s.matches(".*< *[Ss][Cc][Rr][Ii][Pp][Tt] *>.*"))
 			throw new IllegalStringException();
 		return s;
-       */
-      //TODO: how to fix it? :)
+        */
+
+        /*this is a "overly paranoid" filter. other posibilities would be escaping, or the esapi-library*/
+        if (s.matches("[a-zA-Z0-9 ,.-_]+")) {
+          return s;
+        }
+                              
+        throw new IllegalStringException();
 	}
 
 }
