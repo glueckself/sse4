@@ -65,6 +65,24 @@ Host taurus.dmz.vienna.essecorp.invalid (172.16.2.25) is up (0.0037s latency).
 Host lyra.dmz.vienna.essecorp.invalid (172.16.2.253) is up (0.00014s latency).
 Nmap done: 1024 IP addresses (4 hosts up) scanned in 78.25 seconds
 
+walter@tomcat:~$ for i in {1..234}; do printf "fdcb:c447:e9d2:3553:1001::%x" $i | nmap -sP -6 -iL -; done | grep "is up"
+Host omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1) is up (0.00017s latency).
+Host alpha.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::5) is up (0.0030s latency).
+Host beta.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::9) is up (0.0030s latency).
+Host gamma.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::21) is up (0.0028s latency).
+Host delta.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::43) is up (0.0026s latency).
+Host epsilon.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::79) is up (0.0030s latency).
+Host zeta.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::88) is up (0.0029s latency).
+Host tomcat.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::ab) is up (0.000045s latency).
+
+
+walter@tomcat:/home$ for i in {1..234}; do printf "fdcb:c447:e9d2:3553:1003::%x" $i | nmap -sP -6 -iL -; done | grep "is up"
+Host athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f) is up (0.13s latency).
+Host zeus.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::9a) is up (0.13s latency).
+Host kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da) is up (0.00038s latency).
+
+
+
 nmap -sV 192.168.98.1
 All 1000 scanned ports on omega.local.vienna.essecorp.invalid (192.168.98.1) are closed
 
@@ -148,5 +166,38 @@ PORT   STATE SERVICE VERSION
 
 walter@tomcat:~$ nmap -sV 172.16.2.253
 All 1000 scanned ports on lyra.dmz.vienna.essecorp.invalid (172.16.2.253) are closed
+
+
+walter@tomcat:/home$ nmap -sV fdcb:c447:e9d2:3553:1003::7f -6
+Interesting ports on athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f):
+Not shown: 998 closed ports
+PORT    STATE SERVICE  VERSION
+80/tcp  open  http     lighttpd 1.4.28
+443/tcp open  ssl/http lighttpd 1.4.28
+
+walter@tomcat:/home$ nmap -sV fdcb:c447:e9d2:3553:1003::9a -6
+Interesting ports on zeus.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::9a):
+Not shown: 994 closed ports
+PORT   STATE SERVICE  VERSION
+7/tcp  open  echo
+9/tcp  open  discard?
+13/tcp open  daytime
+19/tcp open  chargen  Linux chargen
+22/tcp open  ssh      OpenSSH 5.5p1 Debian 6+squeeze3 (protocol 2.0)
+37/tcp open  time?
+1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at 
+http://www.insecure.org/cgi-bin/servicefp-submit.cgi :
+SF-Port37-TCP:V=5.00%I=7%D=5/15%Time=5193D63B%P=i686-pc-linux-gnu%r(NULL,4
+SF:,"\xd5>T\xd0");
+Service Info: OS: Linux
+
+
+walter@tomcat:~$ nmap -sV fdcb:c447:e9d2:3553:1003::da -6
+All 1000 scanned ports on kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da) are closed
+
+traceroute to athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f), 30 hops max, 80 byte packets
+ 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.237 ms * *
+ 2  kerberos.dmz.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1002::fe)  0.501 ms  0.481 ms  0.464 ms
+ 3  athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f)  118.196 ms  132.601 ms  134.156 ms
 
 
