@@ -40,50 +40,8 @@ Host 192.168.20.100 is up (0.000067s latency).
 Host 192.168.20.254 is up (0.00021s latency).
 Nmap done: 256 IP addresses (2 hosts up) scanned in 41.93 seconds
 
-
-
-
-
-
-
-nmap -v -A 192.168.20.254
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 20:37 CEST
-NSE: Loaded 30 scripts for scanning.
-Initiating Ping Scan at 20:37
-Scanning 192.168.20.254 [2 ports]
-Completed Ping Scan at 20:37, 0.00s elapsed (1 total hosts)
-Initiating Parallel DNS resolution of 1 host. at 20:37
-Completed Parallel DNS resolution of 1 host. at 20:38, 13.00s elapsed
-Initiating Connect Scan at 20:38
-Scanning 192.168.20.254 [1000 ports]
-Discovered open port 22/tcp on 192.168.20.254
-Discovered open port 873/tcp on 192.168.20.254
-Completed Connect Scan at 20:38, 0.02s elapsed (1000 total ports)
-Initiating Service scan at 20:38
-Scanning 2 services on 192.168.20.254
-Completed Service scan at 20:39, 116.12s elapsed (2 services on 1 host)
-NSE: Script scanning 192.168.20.254.
-NSE: Starting runlevel 1 scan
-Initiating NSE at 20:39
-Completed NSE at 20:39, 0.11s elapsed
-NSE: Script Scanning completed.
-Host 192.168.20.254 is up (0.00032s latency).
-Interesting ports on 192.168.20.254:
-Not shown: 998 closed ports
-PORT    STATE SERVICE VERSION
-22/tcp  open  ssh     OpenSSH 5.5p1 Debian 6+squeeze1 (protocol 2.0)
-|  ssh-hostkey: 1024 a3:8f:a6:1b:47:86:79:0a:81:2e:d3:b3:31:c4:3c:0b (DSA)
-|_ 2048 b3:4a:6f:33:30:5a:db:72:f1:9c:c8:ad:39:a7:1d:f6 (RSA)
-873/tcp open  rsync?
-Service Info: OS: Linux
-
-Read data files from: /usr/share/nmap
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 129.39 seconds
-
-
-
+walter@tomcat:~$ nmap -sP 10.12.0.0/24
+Nmap done: 256 IP addresses (0 hosts up) scanned in 104.14 seconds
 
 walter@tomcat:~$ nmap -sP 192.168.98.0/24
 
@@ -108,106 +66,52 @@ Host lyra.dmz.vienna.essecorp.invalid (172.16.2.253) is up (0.00014s latency).
 Nmap done: 1024 IP addresses (4 hosts up) scanned in 78.25 seconds
 
 nmap -sV 192.168.98.1
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-13 21:15 CEST
 All 1000 scanned ports on omega.local.vienna.essecorp.invalid (192.168.98.1) are closed
-
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 0.14 seconds
 
 
 walter@tomcat:~$ nmap -sV 192.168.98.10
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 20:44 CEST
 Interesting ports on alpha.local.vienna.essecorp.invalid (192.168.98.10):
 Not shown: 999 closed ports
 PORT   STATE SERVICE VERSION
 53/tcp open  domain  dnsmasq 2.55
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 6.13 seconds
-
-
 
 walter@tomcat:~$ nmap -sV 192.168.98.28
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 21:16 CEST
 Interesting ports on beta.local.vienna.essecorp.invalid (192.168.98.28):
 Not shown: 999 closed ports
 PORT   STATE SERVICE VERSION
 25/tcp open  smtp?
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 123.75 seconds
-
-
 walter@tomcat:~$ nmap -sV 192.168.98.54
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 21:25 CEST
 Interesting ports on gamma.local.vienna.essecorp.invalid (192.168.98.54):
 Not shown: 999 closed ports
 PORT     STATE SERVICE VERSION
 1080/tcp open  socks5  (Username/password authentication required)
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 6.14 seconds
-
-
-
 
 walter@tomcat:~$ nmap -sV 192.168.98.99
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 21:33 CEST
 Interesting ports on delta.local.vienna.essecorp.invalid (192.168.98.99):
 Not shown: 999 closed ports
 PORT    STATE SERVICE VERSION
 631/tcp open  ipp     CUPS 1.4
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 6.14 seconds
-
-
-
-
 walter@tomcat:~$ nmap -sV 192.168.98.124
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 21:34 CEST
 Interesting ports on tomcat.local.vienna.essecorp.invalid (192.168.98.124):
 Not shown: 997 closed ports
 PORT     STATE SERVICE VERSION
 22/tcp   open  ssh     OpenSSH 5.5p1 Debian 6+squeeze3 (protocol 2.0)
 8000/tcp open  http    Apache Tomcat/Coyote JSP engine 1.1
-8009/tcp open  ajp13?
-Service Info: OS: Linux
-
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 46.40 seconds
-
-
-
+8009/tcp open  ajp13
 
 walter@tomcat:~$ nmap -sV 192.168.98.201
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 21:39 CEST
 Interesting ports on epsilon.local.vienna.essecorp.invalid (192.168.98.201):
 Not shown: 998 closed ports
 PORT    STATE SERVICE     VERSION
 139/tcp open  netbios-ssn Samba smbd 3.X (workgroup: ESSECORP)
 445/tcp open  netbios-ssn Samba smbd 3.X (workgroup: ESSECORP)
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 11.14 seconds
-
-
-
-
 walter@tomcat:~$ nmap -sV 192.168.98.202
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-07 21:40 CEST
 All 1000 scanned ports on zeta.local.vienna.essecorp.invalid (192.168.98.202) are closed
-
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 0.13 seconds
 
 ----------------------------------------------------
 
@@ -223,47 +127,26 @@ traceroute to 172.16.2.12 (172.16.2.12), 30 hops max, 60 byte packets
 
 
 walter@tomcat:~$ nmap -sV 172.16.2.12
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-13 21:16 CEST
 Interesting ports on gemini.dmz.vienna.essecorp.invalid (172.16.2.12):
 Not shown: 999 closed ports
 PORT   STATE SERVICE VERSION
 80/tcp open  http    lighttpd 1.4.28
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 6.15 seconds
-
-
-
-
 walter@tomcat:~$ nmap -sV 172.16.2.15
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-13 21:18 CEST
 Interesting ports on phoenix.dmz.vienna.essecorp.invalid (172.16.2.15):
 Not shown: 999 closed ports
 PORT   STATE SERVICE VERSION
 21/tcp open  ftp     vsftpd 2.3.2
 Service Info: OS: Unix
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 0.14 seconds
-
 walter@tomcat:~$ nmap -sV 172.16.2.25
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-13 21:19 CEST
 Interesting ports on taurus.dmz.vienna.essecorp.invalid (172.16.2.25):
 Not shown: 999 closed ports
 PORT   STATE SERVICE VERSION
 25/tcp open  smtp?
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 123.81 seconds
 
 walter@tomcat:~$ nmap -sV 172.16.2.253
-
-Starting Nmap 5.00 ( http://nmap.org ) at 2013-05-13 21:23 CEST
 All 1000 scanned ports on lyra.dmz.vienna.essecorp.invalid (172.16.2.253) are closed
 
-Service detection performed. Please report any incorrect results at http://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 0.15 seconds
 
