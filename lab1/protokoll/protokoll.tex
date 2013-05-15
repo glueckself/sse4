@@ -128,6 +128,13 @@ Als Erkl"arung f"ur unterschiedliche Antwortzeiten k"onnte sowohl eine "Uberlast
 \subsection{Gefundene Systeme}
 Im Bereich 10.12.0.0/24 wurden keine erreichbaren Hosts gefunden.\\
 \\
+IPv4 Adresse: 192.168.20.100\\
+MAC Adresse: 00:1b:d7:12:bc:51\\
+DNS Hostname: Keiner gefunden\\
+Offene Ports und Services:\\
+Installiertes Betriebssystem:\\
+Vermutete Funktionalit"at:\\
+\\
 IPv4 Adresse: 192.168.20.254\\
 MAC Adresse: 00:e2:aa:21:c5:d1\\
 DNS Hostname: Keiner gefunden\\
@@ -135,7 +142,7 @@ Offene Ports und Services:\\
 Port: 22/tcp, Service: ssh, Version: OpenSSH 5.5p1 Debian 6+squeeze1 (protocol 2.0)\\
 Port: 873/tcp, Service: rsync?\\
 Installiertes Betriebssystem: Debian Squeeze\\
-Vermutete Funktionalit"at: Rsync Server\\
+Vermutete Funktionalit"at: rsync Server\\
 \\
 IPv4 Adresse: 192.168.98.1\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1001::1\\
@@ -182,14 +189,10 @@ Port: 631/tcp, Service: ipp, Version: CUPS 1.4\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da CUPS in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: Print Server\\
 \\
-Uplink 1:
 IPv4 Adresse: 192.168.98.124\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1001::ab\\
 MAC Adresse: 00:1b:d7:12:bc:52\\
 DNS Hostname: tomcat.local.vienna.essecorp.invalid\\
-Uplink 2:
-IPv4 Adresse: 192.168.20.100\\
-MAC Adresse: 00:1b:d7:12:bc:51\\
 Offene Ports und Services:\\
 Port: 22/tcp, Service: ssh, Version: OpenSSH 5.5p1 Debian 6+squeeze3 (protocol 2.0)\\
 Port: 8000/tcp, Service: http, Version: Apache Tomcat/Coyote JSP engine 1.1\\
@@ -266,7 +269,7 @@ Port: 19/tcp, Service: chargen, Version: Linux chargen\\
 Port: 22/tcp, Service: ssh, Version: OpenSSH 5.5p1 Debian 6+squeeze3 (protocol 2.0)\\
 Port: 37/tcp, Service: time?
 Installiertes Betriebssystem: Debian Squeeze\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
+Vermutete Funktionalit"at: SSH Server, verwendet veraltete Protokolle\\
 \\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1003::da\\
 MAC Adresse: Keine gefunden\\
@@ -296,78 +299,49 @@ Im App0 wurden folgende Vulnerabilities gefunden:
 var=malloc(10);
 var[11]=5;
 	\end{lstlisting}
-	Dabei ist es möglich, Funktionspointer oder andere wichtige Datenstrukturen am Heap eines Programmes zu überschreiben um dadurch entweder die Kontrolle zu übernehmen, oder das Programm zum absturz zu bringen.\newline
+	Dabei ist es möglich, Funktionspointer oder andere wichtige Datenstrukturen am Heap eines Programmes zu überschreiben um dadurch entweder die Kontrolle zu übernehmen, oder das Programm zum absturz zu bringen.
 	
-  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 (Ergebnis der strlen-Funktion) subtrahiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
+	
+  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 (Ergebnis der strlen-Funktion subtrahiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
     Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
-    Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).\newline
-    Vorgehensweise:
-    \begin{itemize}
-    \item Eine leere Eingabe machen (,,Enter'' dr"ucken)
-    \end {itemize}
+    Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
     Diese Vulnerability kann in dem Fall f"ur ein DOS genutzt werden.\\
-    Diese Vulnerability wird mit dem Script ,,heap\_int\_overflow.sh'' ausgenutzt.\\
     \\
     Eine Heap Overflow Schwachstelle wurde in Oracle Java JRE \& JDK 7u7 und vorherigen Versionen gefunden. Die Schwachstelle befindet sich in ``t2k.dll'', genauer in ``maxCountPoint'' eines Fonts, und k"onnte von einem Angreifer durch eine spezielle Webseite ausgen"utzt werden. Diese Schwachstelle ist kritisch und hat den h"ochsten CVSS Score, n"amlich 10.\newline
     Quelle: \url{http://seclists.org/bugtraq/2012/Oct/119}
     
   \item[Format-String] \hfill \\
-  Funktionen der printf-Familie verwenden Format-Strings zur Steuerungs ihres verhaltens. Werden dabei spezielle Sequenzen, wie z.B. \%u, \%s oder \%n vorgefunden, so nimmt der Code an, dass entsprechende Argumente "ubergeben worden sind (und daher am Stack liegen). Ist nun der Format-String vom Benutzer beeinflussbar, so kann dadurch ein nicht vorhergesehenes Verhalten der Funktionen ausgel"ost, und damit der Programmablauf ver"andert werden.\newline
-  In der Funktion outprint (main.c:56, main.c:60) wird der vom User eingegebene String als Format-String an printf "ubergeben.\newline
-  Vorgehensweise (DOS/PoC):
-  \begin{itemize}
-  \item Den String ,,\%100\$s'' "uberpr"ufen lassen (ohne Anf"uhrungszeichen eingeben)
-  \end{itemize}
-  Da das Program nun wahrscheinlich abst"urzt (eventuell muss der Parameter 100 ge"andert werden), kann man davon ausgehen, dass eine Format-String-Vulnerability vorliegt (der String sollte nicht lang genug f"ur einen Buffer-Overflow sein).\newline
-  Durch die \%s und \%n Sequenz ist es m"oglich, an beliebige Stellen im Speicher zu lesen bzw. schreiben.\newline
-    Um diese Vulnerability zum Ausf"uhren vom Shellcode nutzen zu k"onnen, sind folgende Schritte notwendig:
+  In der Funktion outprint (Zeile 54) wird der vom User eingegebene String als Format-String an printf "ubergeben.
+    Um diese Vulnerability ausnutzen zu k"onnen, sind folgende Schritte notwendig:
     \begin{itemize}
-        \item Format-Offset bestimmen (=,,Wie viele Bytes m"ussen vom Stack gepopt werden, bevor der der Input-Buffer erreicht wird'')
+        \item Format-Offset des Buffers bestimmen (da eventuell andere libc-Versionen eine andere Anzahl von Variablen in den printf-Funktionen haben.
         \item Zur CPU-Archtektur passenden Format-Offset zum oberem addieren, um die Adresse einer Stack-Frame zu erhalten.
-        \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur den Return-Pointer auf dem Stack bestimmen.
+        \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur RIP auf dem Stack bestimmen.
         \item Durch den Format-Offset und den Stack-Frame-Pointer l"asst sich die Adresse des input-Buffers bestimmen.
         \item Aus diesen Daten kann der String für den Angriff generiert werden:\\
         \begin{lstlisting}
-${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge+$offsetZumShellCode))%${formatOffset}\$n${shellCode}
+${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset}\$n
         \end{lstlisting}
     \end{itemize}
-    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der obere String ist in einer bash-"ahnlichen Syntax.\newline
-    Der geschriebene Wert befindet sich im zweiten Teil des Strings. Ohne Shellcode, kann man dadurch einen Wert auf eine Adresse schreiben.\newline
-    Beispielsweise schreibt der String
-    \begin{lstlisting}
-aaaaaaaa%992u%18$n
-	 \end{lstlisting}
-	 den Wert 1000 an die Adresse 0x6161616161616161.\newline
-    Diese Vulnerability wird durch das Skript ,,format\_string.sh'' ausgenutzt. Dabei kann man eine Addresse und einen Wert angeben, der dorthin geschrieben werden soll.\newline
-    Da der Input-Buffer nur 41 Byte groß ist, werden in ,,format\_string.sh'' die Escape-Sequenzen nicht direkt im String gehalten, sondern bereits evaluiert, so dass nicht-ASCII-Zeichen an das Program "ubergeben werden m"ussen.
+    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der obere String ist in einer bash-"ahnlichen Syntax
     
-    Format-String-Vulnerabilities wurden beispielsweise im Exim Daemon, im Linux Kernel und im Windows Printer Spooler gefunden. Vor allem die Windows Printer Spooler ist sehr gef"ahrlich, da dieser Dienst in der Standardkonfiguration von Windows-System aktiv ist.
-    Quellen:
-    \begin{itemize}
-    \item \url{http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2012-1851}
-    \item \url{http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2011-1764}
-    \item \url{https://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2013-1848}
-\end{itemize}
+    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).\newline
+
     \item[Memory Leak]
-    Ein Memory-Leak ist ein Speicherbereich auf den das Programm keinen Zugriff mehr hat. Memory-Leaks können beispielsweise dadurch entstehen, dass Pointer auf allozierten Speicher "uberschrieben werden.
-    Da der in strip allozierte Speicher (main.c:15) nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu benutzen (main.c:18), terminiert (DOS-Angriff).\newline
-    
-Vorgehensweise:
-\begin{itemize}
-	\item Dem Programm wiederholend (viele Wiederholungen notwendig) neue Strings eingeben.
-\end{itemize}
-Anm.: es empfiehlt sich, eine Schleife zu verwenden. Siehe memory\_leak.sh.\newline
-    
+    Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).\newline
     Im SNMP Module des Cisco IOS XR wurde eine Schwachstelle entdeckt, die es einem Angreifer erm"oglicht durch speziell angefertige SNMP Packete einen Memory Leak auszul"osen. Die Schwachstelle entsteht dadurch, dass der Input nicht genug "Uberpr"uft wird. Der SNMP Prozess startet neu, sobald der ihm zugeteilte Speicher voll ist. Diese Schwachstelle wurde als eher gering gef"ahrlich eingestuft.\newline
     Quelle: \url{http://tools.cisco.com/security/center/content/CiscoSecurityNotice/CVE-2013-1216}
 \end{description}
 
 \subsection{Lab1c - app1}
 Beim Cross-Site-Scripting (XSS) wird in eine bestehende Seite ein Javascript-Code injiziert, wenn die Eingabefelder nicht serverseitig richtig validiert werden.\newline
-Es gibt Stored- und Reflected-XSS.\newline
-Beispielseingabe: <script type="text/javascript">alert("Das ist XSS");</script>.\newline
+Es gibt Stored- und Reflected-XSS.
+Beispielseingabe: <script type="text/javascript">alert("Das ist XSS");</script>.
 
-Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend (siehe ScriptTagValidator.java:9).\newline
+Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend, da nur der Tag "< script >" gefiltert wird, aber nicht beispielsweise "<script>" (---FILENAME---).
+
+Triggern:
+Vorraussetzung: Laufende Web-Applikation, Bekannte IP-Adresse und Port der Web-Applikation.
 
 Vorgehensweise:
 \begin{itemize}
@@ -375,15 +349,9 @@ Vorgehensweise:
 	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt ``author=\$beliebig\&content=\$scriptCode'' und dem vorher erwähntem Cookie schicken.
 \end{itemize}
 
-Oder vereinfacht:
-\begin{itemize}
-	\item Einen Blog-Eintrag mit dem Inhalt ,,<script type=''text/javascript''>\$code</script>'' posten
-\end{itemize}
+Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.
 
-Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.\newline
-Anmerkung: Diese Vulnerability l"asst sich grunds"atzlich auch nutzen um beliebigen XHTML-Code einzuf"ugen.\newline
-
-XSS-Vulnerabilities treten relativ h"aufig auf. Beispielsweise wurden sie auf Routern (\url{http://www.heise.de/security/meldung/Und-taeglich-gruesst-die-Router-Luecke-1846882.html}) oder auf Facebook (\url{http://www.heise.de/security/meldung/Facebook-schliesst-Cross-Site-Scripting-Luecken-1845343.html}) gefunden.
+Anmerkung: Diese Vulnerability l"asst sich grunds"atzlich auch nutzen um beliebigen XHTML-Code einzuf"ugen.
 
 \subsection{Lab1c - app2}
 
@@ -409,44 +377,4 @@ In unserer korrigierten Version wird zur Erzeugung der Session-ID ausschließlic
 Es wurde neben anderen kritischen Schwachstellen auch eine kritische Weak Session ID Schwachstelle in Cisco Unified Videoconferencing 3515,3522,3527,5230,3545,5110,5115 Systemen gefunden. Session IDs sind auf diesen Systemen die Timestamps zu denen sich die Benutzer eingeloggt haben und sind trivial nachzubauen. Diese Timestamps herauszufinden ist z.B. "uber RPC m"oglich. Durch diese Schwachstelle kann sich ein unauthentifizierter Angreifer am System authentifizieren.\newline
 Quelle: \url{http://seclists.org/fulldisclosure/2010/Nov/167}
 
-\section{Beispiele}
-
-\subsection{Source Code formatieren}
-Es folgen einige Beispiele wie Sourcecode in diesem Dokument formatiert und referenziert werden kann
-(\hyperref[code:beispiel1]{siehe Listing~\ref*{code:beispiel1} auf Seite~\pageref*{code:beispiel1}} und \hyperref[code:beispiel2]{siehe Listing~\ref*{code:beispiel2} auf Seite~\pageref*{code:beispiel2}}).
-
-Ebenso k"onnen kurzer Code oder kurze Befehle direkt in der Zeile in einem \lstinline{lstinline Block} mit typengleicher Schrift formatiert werden.
-
-%\lstinputlisting[caption=Example C/C++ file,label=code:beispiel1,style=c]{example.c}
-
-\begin{lstlisting}[caption=Example bash script,label=code:beispiel2,style=simple]
-#!/bin/bash
-echo "Bash version ${BASH_VERSION}..."
-for i in {0..10..2}
-  do
-     echo ``Welcome $i times''
- done
-
-echo ``some very very very very very very very very very very very very very very very very very very very very long string''s
-
-exit 0;
-\end{lstlisting}
-
-\subsection{Bilder}
-
-Es folgen einige Beispiele wie Bilder in diesem Dokument eingefuegt werden koennen
-(\hyperref[fig:logo1]{siehe Abbildung~\ref*{fig:logo1} auf Seite~\pageref*{fig:logo1}}).
-
-\begin{figure}[h!]
-  \centering
-  \fbox{
-    \includegraphics[width=0.4\textwidth]{./imgs/esse-logo-bw.png}
-  }
-  \caption{ESSE Logo}
-  \label{fig:logo1}
-\end{figure}
-
-
 \end{document}
-
-
