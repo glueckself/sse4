@@ -140,10 +140,18 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 Im App0 wurden folgende Vulnerabilities gefunden:
 \begin{description}
   \item[Integer und Heap-Buffer-Overflow] \hfill \\
-    Der Integer-Overflow tritt Aufgrund der Subtraktion von -1 von einem size\_t-Typ mit dem Wert 0. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
+  	 Ein Integer-Overflow ist das Ergebnis einer Operation (Addition, Subtraktion, ...), bei der der Wertebereich der Variable überschritten wird.\newline
+  	 Ein Heap-Buffer-Overflow bezeichnet den Zugriff außerhalb der Grenzen des allozierten Speichers. Beispielsweise:
+  	 \begin{lstlisting}
+var=malloc(10);
+var[11]=5;
+	\end{lstlisting}
+	Dabei ist es möglich, Funktionspointer oder andere wichtige Datenstrukturen am Heap eines Programmes zu überschreiben um dadurch entweder die Kontrolle zu übernehmen, oder das Programm zum absturz zu bringen.
+	
+  	 Beispielsweise wird in app0 -1 von einem size\_t-Typ mit dem Wert 0 subtrachiert. Da size\_t unsigned ist, f"uhrt das zu einem wrap-around, so dass der neue Wert 0xFFFFFFFFFFFFFFFF ist. \newline
     Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
     Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
-    Diese Vulnerability kann f"ur ein DOS genutzt werden.\newline
+    Diese Vulnerability kann in dem Fall f"ur ein DOS genutzt werden.
     Eine solche Heap Overflow Schwachstelle wurde in Oracle Java JRE \& JDK 7u7 und vorherigen Versionen gefunden. Die Schwachstelle befindet sich in \"t2k.dll\", genauer in \"maxCountPoint\" eines Fonts, und k"onnte von einem Angreifer durch eine spezielle Webseite ausgen"utzt werden. Diese Schwachstelle ist kritisch und hat den h"ochsten CVSS Score, n"amlich 10.\newline
     Quelle: \url{http://seclists.org/bugtraq/2012/Oct/119}
     
