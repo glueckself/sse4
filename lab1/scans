@@ -147,7 +147,24 @@ traceroute to 172.16.2.12 (172.16.2.12), 30 hops max, 60 byte packets
  1  omega.local.vienna.essecorp.invalid (192.168.98.1)  3.864 ms  3.836 ms  3.812 ms
  2  gemini.dmz.vienna.essecorp.invalid (172.16.2.12)  3.860 ms  3.841 ms  3.828 ms
 
+traceroute to lyra.dmz.vienna.essecorp.invalid (172.16.2.253), 30 hops max, 60 byte packets
+ 1  lyra.dmz.vienna.essecorp.invalid (172.16.2.253)  0.187 ms  0.162 ms  0.155 ms
 
+traceroute to athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f), 30 hops max, 80 byte packets
+ 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.237 ms * *
+ 2  kerberos.dmz.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1002::fe)  0.501 ms  0.481 ms  0.464 ms
+ 3  athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f)  118.196 ms  132.601 ms  134.156 ms
+
+walter@tomcat:~$ traceroute kerberos.extra.atlanta.essecorp.invalid
+traceroute to kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da), 30 hops max, 80 byte packets
+ 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.188 ms  0.159 ms  0.166 ms
+ 2  kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da)  0.505 ms  0.484 ms  0.468 ms
+
+walter@tomcat:~$ traceroute zeus.extra.atlanta.essecorp.invalid
+traceroute to zeus.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::9a), 30 hops max, 80 byte packets
+ 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.208 ms  0.183 ms  0.168 ms
+ 2  kerberos.dmz.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1002::fe)  0.503 ms  0.487 ms  0.472 ms
+ 3  zeus.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::9a)  110.105 ms  120.030 ms  127.884 ms
 
 ----------------------------------------------------
 
@@ -210,13 +227,5 @@ Service Info: OS: Linux
 walter@tomcat:~$ nmap -sV fdcb:c447:e9d2:3553:1003::da -6
 All 1000 scanned ports on kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da) are closed
 
-traceroute to athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f), 30 hops max, 80 byte packets
- 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.237 ms * *
- 2  kerberos.dmz.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1002::fe)  0.501 ms  0.481 ms  0.464 ms
- 3  athena.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::7f)  118.196 ms  132.601 ms  134.156 ms
 
-walter@tomcat:~$ traceroute kerberos.extra.atlanta.essecorp.invalid
-traceroute to kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da), 30 hops max, 80 byte packets
- 1  omega.local.vienna.essecorp.invalid (fdcb:c447:e9d2:3553:1001::1)  0.188 ms  0.159 ms  0.166 ms
- 2  kerberos.extra.atlanta.essecorp.invalid (fdcb:c447:e9d2:3553:1003::da)  0.505 ms  0.484 ms  0.468 ms
 

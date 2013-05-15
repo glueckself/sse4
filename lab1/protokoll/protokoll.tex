@@ -112,68 +112,82 @@ Dieses Problem tritt auf, wenn ``allowLinking'' und ``URIencoding=UTF-8'' im Tom
 \section{Lab1b}
 
 \subsection{Vorgehensweise}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. 
+Nach der Herstellung der SSH-Verbindung wurden zun"achst die lokalen Netzverbindungen mit \texttt{ip addr} ermittelt, wozu auch die IPv6-Adresse mitsamt dem Netzpr"afix geh"orte. Die daraus ersichtlichen Subnetze wurden dann mit \texttt{nmap -sP <subnet>} auf aktive Hosts untersucht, wobei jeder Host anschließend mit \texttt{nmap -sV <host>} auf offene Ports untersucht und der Hostname ermittelt wurde.
 
-\subsection{Gefundene Systeme - IPv4}
-\begin{description}
-\item
-Im Bereich 10.12.0.0/24 wurden keine erreichbaren Hosts gefunden.
-\item
+Die MAC-Adresse der direkt im selben Subnet befindlichen Hosts konnte aus dem ARP-Cahce mittels \texttt{ip neighbor} ermittelt werden.
+
+Anschließend wurden die angegebenen Subnetze ebenfalls gescannt, wobei die Netztopologie mittels \texttt{traceroute <host>} zu allen Hosts, die in "uber Router erreichbaren Subnetzen lagen, ermittelt. Hierbei fielen einige Inkonsistenzen auf, die im Netzwerkplan dargestellt werden - obwohl Hosts laut ihrer IP-Adresse in einem bestimmten Subnet liegen sollten, welches nur "uber eine Zwischenstation erreichbar war, lieferte \texttt{traceroute} eine direkte Verbindung bzw. eine Verbindung "uber weniger Zwischenstationen als erwartet - daf"ur konnte keine Erkl"arung gefunden werden.
+
+Zum Scan der IPv6-Bereiche wurde ein kleines Skript verwendet, welches "uber die m"oglichen Adressen iterierte und diese \texttt{nmap} zum scan "ubertrug - sp"atere Versionen von \texttt{nmap} k"onnen aber bereits IPv6-Bereiche scannen.
+
+Als Erkl"arung f"ür unterschiedliche Antwortzeiten k"onnte sowohl eine "Uberlastung des einzelnen Hosts, als auch eine Anbindung per VPN in das lokale Netz herangezogen werden, wodurch dann durch die erh"ohte Umlaufzeit Verz"ogerungen auftreten k"onnen.
+
+\subsection{Gefundene Systeme}
+Im Bereich 10.12.0.0/24 wurden keine erreichbaren Hosts gefunden.\\
+\\
 IPv4 Adresse: 192.168.20.100\\
 MAC Adresse: 00:1b:d7:12:bc:51\\
-DNS Hostname:\\
+DNS Hostname: Keiner gefunden\\
 Offene Ports und Services:\\
 Installiertes Betriebssystem:\\
 Vermutete Funktionalit"at:\\
-\item
+\\
 IPv4 Adresse: 192.168.20.254\\
 MAC Adresse: 00:e2:aa:21:c5:d1\\
-DNS Hostname: \\
+DNS Hostname: Keiner gefunden\\
 Offene Ports und Services:\\
-Installiertes Betriebssystem:\\
-Vermutete Funktionalit"at:\\
-\item
+Port: 22/tcp, Service: ssh, Version: OpenSSH 5.5p1 Debian 6+squeeze1 (protocol 2.0)\\
+Port: 873/tcp, Service: rsync?\\
+Installiertes Betriebssystem: Debian Squeeze\\
+Vermutete Funktionalit"at: Rsync Server\\
+\\
 IPv4 Adresse: 192.168.98.1\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::1\\
 MAC Adresse: 00:1b:d2:0d:84:98\\
 DNS Hostname: omega.local.vienna.essecorp.invalid\\
 Offene Ports und Services: Alle Ports geschlossen
 \\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
+\\
 IPv4 Adresse: 192.168.98.10\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::5\\
 MAC Adresse: 00:1b:d2:d1:1f:85\\
 DNS Hostname: alpha.local.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 53/tcp, Service: domain, Version: dnsmasq 2.55\\
 Installiertes Betriebssystem: Unix ("ahnlich)\\
 Vermutete Funktionalit"at: DNS Server\\
-\item
+\\
 IPv4 Adresse: 192.168.98.28\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::9\\
 MAC Adresse: 00:1b:d2:f0:60:59\\
 DNS Hostname: beta.local.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 25/tcp, Service: smtp?\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da smtp in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: SMTP Server\\
-\item
+\\
 IPv4 Adresse: 192.168.98.54\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::21\\
 MAC Adresse: 00:1b:d2:83:b8:41\\
 DNS Hostname: gamma.local.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 1080/tcp, Service: socks5\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da socks5 in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: Proxy Server\\
-\item
+\\
 IPv4 Adresse: 192.168.98.99\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::43\\
 MAC Adresse: 00:1b:d2:a7:8f:d2\\
 DNS Hostname: delta.local.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 631/tcp, Service: ipp, Version: CUPS 1.4\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da CUPS in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: Print Server\\
-\item
+\\
 IPv4 Adresse: 192.168.98.124\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::ab\\
 MAC Adresse: 00:1b:d7:12:bc:52\\
 DNS Hostname: tomcat.local.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
@@ -182,33 +196,35 @@ Port: 8000/tcp, Service: http, Version: Apache Tomcat/Coyote JSP engine 1.1\\
 Port: 8009/tcp, Service: ajp13\\
 Installiertes Betriebssystem: Debian Squeeze\\
 Vermutete Funktionalit"at: Web Server\\
-\item
+\\
 IPv4 Adresse: 192.168.98.201\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::79\\
 MAC Adresse: 00:1b:d2:38:ae:b9\\
 DNS Hostname: epsilon.local.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 139/tcp, Service: netbios-ssn, Version: Samba smbd 3.X (workgroup: ESSECORP)\\
 Port: 445/tcp, Service: netbios-ssn, Version: Samba smbd 3.X (workgroup: ESSECORP)\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da samba in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at:\\
 Port 139: NetBIOS Session Service\\
 Port 445: Microsoft-DS Active Directory, Windows Shares, Microsoft-DS SMB File Sharing
-\item
+\\
 IPv4 Adresse: 192.168.98.202\\
+IPv6 Adresse: fdcb:c447:e9d2:3553:1001::88\\
 MAC Adresse: 00:1b:d2:85:9c:c4\\
 DNS Hostname: zeta.local.vienna.essecorp.invalid\\
 Offene Ports und Services: Alle Ports geschlossen\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
+\\
 IPv4 Adresse: 172.16.2.12\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: gemini.dmz.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 80/tcp, Service: http, Version: lighttpd 1.4.28\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da lighttpd in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: Web Server\\
-\item
+\\
 IPv4 Adresse: 172.16.2.15\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: phoenix.dmz.vienna.essecorp.invalid\\
@@ -216,91 +232,31 @@ Offene Ports und Services:\\
 Port: 21/tcp, Service: ftp, Version: vsftpd 2.3.2\\
 Installiertes Betriebssystem: Unix ("ahnlich)\\
 Vermutete Funktionalit"at: File Server\\
-\item
+\\
 IPv4 Adresse: 172.16.2.25\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: taurus.dmz.vienna.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 25/tcp, Service: smtp?\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da smtp in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: SMTP Server\\
-\item
+\\
 IPv4 Adresse: 172.16.2.253\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: lyra.dmz.vienna.essecorp.invalid\\
 Offene Ports und Services: Alle Ports geschlossen\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\end{description}
-
-\subsection{Gefundene Systeme - IPv6}
-\begin{description}
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::1\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: omega.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::5\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: alpha.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::9\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: beta.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::21\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: gamma.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::43\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: delta.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::79\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: epsilon.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::88\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: zeta.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
-IPv6 Adresse: fdcb:c447:e9d2:3553:1001::ab\\
-MAC Adresse: Keine gefunden\\
-DNS Hostname: tomcat.local.vienna.essecorp.invalid\\
-Offene Ports und Services: Alle Ports geschlossen\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
-Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
+\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1003::7f\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: athena.extra.atlanta.essecorp.invalid\\
 Offene Ports und Services:\\
 Port: 80/tcp, Service: http, Version: lighttpd 1.4.28\\
 Port: 443/tcp, Service: ssl/http, Version: lighttpd 1.4.28\\
-Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
+Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da lighttpd in verschiedenen Betriebssystemen installierbar ist\\
 Vermutete Funktionalit"at: Web Server (HTTPS)\\
-\item
+\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1003::9a\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: zeus.extra.atlanta.essecorp.invalid\\
@@ -313,21 +269,23 @@ Port: 22/tcp, Service: ssh, Version: OpenSSH 5.5p1 Debian 6+squeeze3 (protocol 2
 Port: 37/tcp, Service: time?
 Installiertes Betriebssystem: Debian Squeeze\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
+\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1003::da\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: kerberos.extra.atlanta.essecorp.invalid\\
 Offene Ports und Services: Alle Ports geschlossen\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\item
+\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1002::fe\\
 MAC Adresse: Keine gefunden\\
 DNS Hostname: kerberos.dmz.vienna.essecorp.invalid\\
 Offene Ports und Services: Alle Ports geschlossen\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden\\
 Vermutete Funktionalit"at: Es kann keine Aussage getroffen werden\\
-\end{description}
+
+\subsection{Netzwerkplan}
+\includegraphics[width=\textwidth]{./imgs/netzwerkplan.png}
 
 \section{Lab1c} 
 \subsection{Lab1c - app0}
@@ -419,7 +377,7 @@ Vorraussetzung: Laufende Web-Applikation, Bekannte IP-Adresse und Port der Web-A
 Vorgehensweise:
 \begin{itemize}
 	\item Seite "offnen um das Session-Cookie zu bekommen
-	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt "author=\$beliebig\&content=\$scriptCode" und dem vorher erwähntem Cookie schicken.
+	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt ``author=\$beliebig\&content=\$scriptCode'' und dem vorher erwähntem Cookie schicken.
 \end{itemize}
 
 Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.
@@ -465,10 +423,10 @@ Ebenso k"onnen kurzer Code oder kurze Befehle direkt in der Zeile in einem \lsti
 echo "Bash version ${BASH_VERSION}..."
 for i in {0..10..2}
   do
-     echo "Welcome $i times"
+     echo ``Welcome $i times''
  done
 
-echo "some very very very very very very very very very very very very very very very very very very very very long string"
+echo ``some very very very very very very very very very very very very very very very very very very very very long string''s
 
 exit 0;
 \end{lstlisting}
