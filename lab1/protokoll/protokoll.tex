@@ -119,8 +119,11 @@ Die MAC-Adresse der direkt im selben Subnet befindlichen Hosts konnte aus dem AR
 Anschließend wurden die angegebenen Subnetze ebenfalls gescannt, wobei die Netztopologie mittels \texttt{traceroute <host>} zu allen Hosts, die in "uber Router erreichbaren Subnetzen lagen, ermittelt. Hierbei fielen einige Inkonsistenzen auf, die im Netzwerkplan dargestellt werden - obwohl Hosts laut ihrer IP-Adresse in einem bestimmten Subnet liegen sollten, welches nur "uber eine Zwischenstation erreichbar war, lieferte \texttt{traceroute} eine direkte Verbindung bzw. eine Verbindung "uber weniger Zwischenstationen als erwartet - daf"ur konnte keine Erkl"arung gefunden werden.
 
 Zum Scan der IPv6-Bereiche wurde ein kleines Skript verwendet, welches "uber die m"oglichen Adressen iterierte und diese \texttt{nmap} zum scan "ubertrug - sp"atere Versionen von \texttt{nmap} k"onnen aber bereits IPv6-Bereiche scannen.
+\begin{lstlisting}[caption=IPv6 Skript Beispiel,label=code:ipv6,style=simple]
+for i in {1..234}; do printf "fdcb:c447:e9d2:3553:1001::%x" $i | nmap -sP -6 -iL -; done | grep "is up"
+\end{lstlisting}
 
-Als Erkl"arung f"ür unterschiedliche Antwortzeiten k"onnte sowohl eine "Uberlastung des einzelnen Hosts, als auch eine Anbindung per VPN in das lokale Netz herangezogen werden, wodurch dann durch die erh"ohte Umlaufzeit Verz"ogerungen auftreten k"onnen.
+Als Erkl"arung f"ur unterschiedliche Antwortzeiten k"onnte sowohl eine "Uberlastung des einzelnen Hosts, als auch eine Anbindung per VPN in das lokale Netz herangezogen werden, wodurch dann durch die erh"ohte Umlaufzeit Verz"ogerungen auftreten k"onnen.
 
 \subsection{Gefundene Systeme}
 Im Bereich 10.12.0.0/24 wurden keine erreichbaren Hosts gefunden.\\
@@ -205,9 +208,7 @@ Offene Ports und Services:\\
 Port: 139/tcp, Service: netbios-ssn, Version: Samba smbd 3.X (workgroup: ESSECORP)\\
 Port: 445/tcp, Service: netbios-ssn, Version: Samba smbd 3.X (workgroup: ESSECORP)\\
 Installiertes Betriebssystem: Es kann keine Aussage getroffen werden, da samba in verschiedenen Betriebssystemen installierbar ist\\
-Vermutete Funktionalit"at:\\
-Port 139: NetBIOS Session Service\\
-Port 445: Microsoft-DS Active Directory, Windows Shares, Microsoft-DS SMB File Sharing
+Vermutete Funktionalit"at: Samba Datei Server\\
 \\
 IPv4 Adresse: 192.168.98.202\\
 IPv6 Adresse: fdcb:c447:e9d2:3553:1001::88\\
