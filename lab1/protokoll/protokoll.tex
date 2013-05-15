@@ -178,6 +178,9 @@ Um den Fehler zu beheben, kann statt der durch die Applikation selbst implementi
 
 In unserer korrigierten Version wird zur Erzeugung der Session-ID ausschließlich eine Zufallszahl verwendet, die anschließend wieder verworfen wird: \lstinline{$sessionid = md5(rand());} Ein Angreifer hat keine M"oglichkeit, von außen an die Zufallszahl zu gelangen und der hohe m"ogliche Wertebereich verhindert ein Erraten der Zahl durch simples Ausprobieren. Zu beachten bei der Verwendung von Pseudo-Zufallszahlen ist eine m"oglichst hohe Entropie bei der Wahl des Initialisierungswertes, da sich s"amtliche erzeugte Zufallszahlen berechnen lassen, wenn ein Angreifer diesen Wert erraten kann.
 
+Es wurde neben anderen kritischen Schwachstellen auch eine kritische Weak Session ID Schwachstelle in Cisco Unified Videoconferencing 3515,3522,3527,5230,3545,5110,5115 Systemen gefunden. Session IDs sind auf diesen Systemen die Timestamps zu denen sich die Benutzer eingeloggt haben und sind trivial nachzubauen. Diese Timestamps herauszufinden ist z.B. "uber RPC m"oglich. Durch diese Schwachstelle kann sich ein unauthentifizierter Angreifer am System authentifizieren.\newline
+Quelle: \url{http://seclists.org/fulldisclosure/2010/Nov/167}
+
 \section{Beispiele}
 
 \subsection{Source Code formatieren}
