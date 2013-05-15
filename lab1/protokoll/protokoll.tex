@@ -20,7 +20,7 @@
 % Group number or "0" for Lab0
 \newcommand{\gruppe}{4}
 % Date
-\newcommand{\datum}{13.05.2013}
+\newcommand{\datum}{15.05.2013}
 % valid values: "Lab0", "Lab1" (be sure to use Uppercase for first character)
 \newcommand{\lab}{Lab1}
 
@@ -32,9 +32,9 @@
 \newcommand{\semester}{SS 2013}
 
 % Student data in Lab0 or first student of group in Lab1
-\newcommand{\studentDName}{Srdjan Markovic}
-\newcommand{\studentDMatrnr}{1025857}
-\newcommand{\studentDEmail}{e1025857@student.tuwien.ac.at}
+\newcommand{\studentAName}{Srdjan Markovic}
+\newcommand{\studentAMatrnr}{1025857}
+\newcommand{\studentAEmail}{e1025857@student.tuwien.ac.at}
 
 % second student of group in Lab1, for Lab0 you may leave it unchanged
 \newcommand{\studentBName}{Julian Großhauser}
@@ -43,12 +43,12 @@
 
 % second student of group in Lab1, for Lab0 you may leave it unchanged
 \newcommand{\studentCName}{Bruno Bajtela}
-\newcommand{\studentCMatrnr}{---EINTRAGEN---}
-\newcommand{\studentCEmail}{bruno.bajtela@tuwien.ac.at}
+\newcommand{\studentCMatrnr}{0925302}
+\newcommand{\studentCEmail}{e0925302@student.tuwien.ac.at}
 
-\newcommand{\studentAName}{Aleksandar Sibincic}
-\newcommand{\studentAMatrnr}{0727895}
-\newcommand{\studentAEmail}{e0727895@student.tuwien.ac.at}
+\newcommand{\studentDName}{Aleksandar Sibincic}
+\newcommand{\studentDMatrnr}{0727895}
+\newcommand{\studentDEmail}{e0727895@student.tuwien.ac.at}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 % DO NOT CHANGE THE FOLLOWING PART
@@ -72,11 +72,33 @@
 
 \section{Lab1a}
 
-\subsection{Sub-Ueberschrift 1}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\subsection{Vorgehensweise}
+Nachdem man sich in die Übungsumgebung loggt, stehen keine Web Browsing tools (wie zB. browsers, lynx, links o.ä.) zu Verfügung. Deshalb muss man ein anderer Weg finden, die Homepage auf einen Rechner, der von aussen erreichbar ist, zu sehen. Eine Möglichkeit wäre hier den SSH Tunnel(Port Forwarding) zu bauen.
+\url{http://wiki.ubuntuusers.de/SSH#SSH-Tunnel}
+\url{http://blog.ch-becker.de/2011/02/20/ssh-tunnel-mit-linux/}
+(image 1)
+Wir haben folgendes Befehl ausgeführt um einen SSH Tunnel zu bauen:
+\begin{lstlisting}
+ssh -L 2008:192.168.20.100:8000 XXXXXXX@sela.inso.tuwien.ac.at -p 12345
+\end{lstlisting}
+Nachdem Tunnel aufgebaut ist, man kann sich über dieser Port die Homepage auf dem alten Tomcat sehen. Eingabe der URL http://localhost:2008 bringt uns das gewünschte Homepage.
+(image2)
+Um zu erfinden um welche Version des Tomcats handelt es, ist genug einen ungültigen Anfrage auf dem Webserver zu senden. Wenn man zB. resource /wrong auffordert (unter http://localhost:2008/wrong), kommt eine Fehlermeldung und man kann leicht sehen,  dass den Webserver Apache Tomcat/6.0.16 ist.
+(image3)
+Um privaten Schlüssel für Benutzer walter zu bekommen, haben wir folgendes Befehl ausgeführt (siehe Schwachstellen und Angriff):
+\begin{lstlisting}
+http://127.0.0.1:2008/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/home/walter/.ssh/id_rsa
+\end{lstlisting}
+Mit dieser Schlüssel haben wir dann ein SSH-Zugang auf dem Server gehabt. Wenn wir dieser Schlüssel in der Übungsumgebung kopiert haben, konnten wir uns mit der 
+\begin{lstlisting}
+ssh -i id_rsa walter@192.168.20.100
+\end{lstlisting}
+oggen.
+(image4)
 
-\subsection{Sub-Ueberschrift 2}
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+\subsection{Schwachstellen und Angriff}
+Unter \url{http://tomcat.apache.org/security-6.html} gibt es eine Liste der Tomcat6.X.X Schwachstellen. Liste der bekannten Schwachstellen für Tomcat6.0.16 ist unter \url{http://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-887/version_id-56605/Apache-Tomcat-6.0.16.html} zu finden. Man kann bemerken dass einzige Schwachstelle hier gelistet die einem Angreifer beliebige Daten zu lesen ermöglicht, ist Remote UTF-8 Directory Traversal. Genaue Beschreibung und Spezifikation kann man unter \url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2938} lesen. Dieses Problem tritt auf, wenn 'allowLinking' und 'URIencoding=UTF-8' im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis hat zB. Tiefe 3 (z.B. /usr/local/wwwroot), man kann auf folgende Weise auf beliebige Daten zuzugreifen: http://www.target.com/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/foo/bar   . Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder 'allowLinking' deaktivieren oder 'URIencoding' nicht auf UTF-8 setzen. Noch besser wäre Upgrade auf eine neuere Version des Tomcat. Mit der Version 6.0.18 ist dieses Problem gelöst.
+
 
 \section{Lab1b}
 
