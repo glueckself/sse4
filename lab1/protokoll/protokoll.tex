@@ -73,29 +73,40 @@
 \section{Lab1a}
 
 \subsection{Vorgehensweise}
-Nachdem man sich in die Übungsumgebung einloggt, stehen einem keine Web Browsing Tools wie z.B. lynx, links o.ä. zu Verfügung. Deshalb muss man einen anderer Weg finden, die Homepage auf einem Rechner, der von außen erreichbar ist, zu sehen. Eine Möglichkeit wäre hier einen SSH Tunnel (Port Forwarding) zu bauen.
-\url{http://wiki.ubuntuusers.de/SSH#SSH-Tunnel}
-\url{http://blog.ch-becker.de/2011/02/20/ssh-tunnel-mit-linux/}
-(image 1)
-Wir haben folgenden Befehl ausgeführt um einen SSH Tunnel zu bauen:
-\begin{lstlisting}
-ssh -L 2008:192.168.20.100:8000 XXXXXXX@sela.inso.tuwien.ac.at -p 12345
-\end{lstlisting}
-Nachdem der Tunnel aufgebaut ist, kann man sich über diesen Port die Homepage auf dem veralteten Tomcat Server ansehen. Eingabe der URL \url{http://localhost:2008} bringt uns zur gewünschte Homepage.
-(image2)
-Um herauszufinden um welche Version des Tomcat Server sich handelt, genügt es eine ungültigen Anfrage zum Webserver zu senden. Wenn man z.B. die Resource /wrong auffordert (unter http://localhost:2008/wrong), bekommt man eine Fehlermeldung und man erkennt leicht, dass es sich um einen Tomcat Server Version 6.0.16 handelt.
-(image3)
-Um den privaten Schlüssel für Benutzer walter zu bekommen, haben wir folgendes Befehl ausgeführt (siehe Schwachstellen und Angriff): \url{http://127.0.0.1:2008/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/home/walter/.ssh/id_rsa}
-Mit diesem Schlüssel haben wir einen SSH-Zugang auf dem Server. Wenn wir diesen Schlüssel in die Übungsumgebung kopieren, können wir uns einloggen.
-\begin{lstlisting}
-ssh -i id_rsa walter@192.168.20.100
-\end{lstlisting}
-oggen.
-(image4)
+Nachdem man sich in die Übungsumgebung loggt, stehen keine Web Browsing tools (wie zB. browsers, lynx, links o.ä.) zu Verfügung. Deshalb muss man ein anderer Weg finden, die Homepage auf einen Rechner, der von aussen erreichbar ist, zu sehen. Eine Möglichkeit wäre hier den SSH Tunnel(Port Forwarding) zu bauen.
+\\ \url{http://wiki.ubuntuusers.de/SSH#SSH-Tunnel}
+\\ \url{http://blog.ch-becker.de/2011/02/20/ssh-tunnel-mit-linux/}
+\\
+\\Wir haben folgendes Befehl ausgeführt um einen SSH Tunnel zu bauen:
+\\ssh -L 2008:192.168.20.100:8000 XXXXXXX@sela.inso.tuwien.ac.at -p 12345
+\\Nachdem Tunnel aufgebaut ist, man kann sich über dieser Port die Homepage auf dem alten Tomcat sehen. Eingabe der URL http://localhost:2008 bringt uns das gewünschte Homepage.
+(\hyperref[fig:image1]{siehe Abbildung~\ref*{fig:image1} auf Seite~\pageref*{fig:image1}}).
+\begin{figure}[h!]
+  \centering
+  \fbox{
+    \includegraphics[width=0.4\textwidth]{./imgs/image1.png}
+  }
+  \caption{Homepage auf 192.168.20.100:8000}
+  \label{fig:image1}
+\end{figure}
+\\
+Um zu erfinden um welche Version des Tomcats handelt es, ist genug einen ungültigen Anfrage auf dem Webserver zu senden. Wenn man zB. resource /wrong auffordert (unter http://localhost:2008/wrong), kommt eine Fehlermeldung und man kann leicht sehen,  dass den Webserver Apache Tomcat/6.0.16 ist.
+(\hyperref[fig:image2]{siehe Abbildung~\ref*{fig:image2} auf Seite~\pageref*{fig:image2}}).
+\begin{figure}[h!]
+  \centering
+  \fbox{
+    \includegraphics[width=0.4\textwidth]{./imgs/image2.png}
+  }
+  \caption{Tomcat Version}
+  \label{fig:image2}
+\end{figure}
+\\
+Um privaten Schlüssel für Benutzer walter zu bekommen, haben wir folgendes Befehl ausgeführt (siehe Schwachstellen und Angriff): http://127.0.0.1:2008/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/home/walter/.ssh/id_rsa
+\\Mit dieser Schlüssel haben wir dann ein SSH-Zugang auf dem Server gehabt. Wenn wir dieser Schlüssel in der Übungsumgebung kopiert haben, konnten wir uns mit der 
+\\ssh -i id_rsa walter@192.168.20.100 \\loggen.
 
 \subsection{Schwachstellen und Angriff}
-Unter \url{http://tomcat.apache.org/security-6.html} gibt es eine Liste der Tomcat-6.X.X Schwachstellen. Eine Liste der bekannten Schwachstellen für Tomcat-6.0.16 ist unter \url{http://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-887/version_id-56605/Apache-Tomcat-6.0.16.html} zu finden.
-Die einzige hier gelistete Schwachstelle, die es einem als Angreifer ermöglicht beliebige Dateien zu lesen, ist Remote UTF-8 Directory Traversal. Eine genaue Beschreibung und Spezifikation findet man unter \url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2938}. Dieses Problem tritt auf, wenn 'allowLinking' und 'URIencoding=UTF-8' im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis zB. die Tiefe 3 hat (z.B. /usr/local/wwwroot), kann man auf folgende Weise auf beliebige Daten zugreifen: \url{http://www.target.com/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/foo/bar}. Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder 'allowLinking' zu deaktivieren oder 'URIencoding' nicht auf UTF-8 zu setzen. Noch besser wäre ein Upgrade auf eine neuere Version des Tomcat Server. In der Version 6.0.18 wurde dieses Problem behoben.
+Unter \url{http://tomcat.apache.org/security-6.html} gibt es eine Liste der Tomcat6.X.X Schwachstellen. Liste der bekannten Schwachstellen für Tomcat6.0.16 ist unter\\ \url{http://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-887/version_id-56605/Apache-Tomcat-6.0.16.html} \\zu finden. Man kann bemerken dass einzige Schwachstelle hier gelistet die einem Angreifer beliebige Daten zu lesen ermöglicht, ist Remote UTF-8 Directory Traversal. Genaue Beschreibung und Spezifikation kann man unter \\ \url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2938} \\lesen. Dieses Problem tritt auf, wenn 'allowLinking' und 'URIencoding=UTF-8' im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis hat zB. Tiefe 3 (z.B. /usr/local/wwwroot), man kann auf folgende Weise auf beliebige Daten zuzugreifen: http://www.target.com/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/foo/bar   \\Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder 'allowLinking' deaktivieren oder 'URIencoding' nicht auf UTF-8 setzen. Noch besser wäre Upgrade auf eine neuere Version des Tomcat. Mit der Version 6.0.18 ist dieses Problem behobt.
 
 
 \section{Lab1b}
