@@ -363,13 +363,10 @@ Anm.: es empfiehlt sich, eine Schleife zu verwenden. Siehe memory\_leak.sh.\newl
 
 \subsection{Lab1c - app1}
 Beim Cross-Site-Scripting (XSS) wird in eine bestehende Seite ein Javascript-Code injiziert, wenn die Eingabefelder nicht serverseitig richtig validiert werden.\newline
-Es gibt Stored- und Reflected-XSS.
-Beispielseingabe: <script type="text/javascript">alert("Das ist XSS");</script>.
+Es gibt Stored- und Reflected-XSS.\newline
+Beispielseingabe: <script type="text/javascript">alert("Das ist XSS");</script>.\newline
 
-Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend (siehe ScriptTagValidator.java:9).
-
-Triggern:
-Vorraussetzung: Laufende Web-Applikation, Bekannte IP-Adresse und Port der Web-Applikation.
+Im Beispiel app2 wird zwar die Benutzereingabe validiert, jedoch nur ungen"ugend (siehe ScriptTagValidator.java:9).\newline
 
 Vorgehensweise:
 \begin{itemize}
@@ -377,9 +374,15 @@ Vorgehensweise:
 	\item Einen POST-HTTP-Request an /blog/post mit dem Inhalt ``author=\$beliebig\&content=\$scriptCode'' und dem vorher erwähntem Cookie schicken.
 \end{itemize}
 
-Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.
+Oder vereinfacht:
+\begin{itemize}
+	\item Einen Blog-Eintrag mit dem Inhalt ,,<script type=''text/javascript''>\$code</script>'' posten
+\end{itemize}
 
-Anmerkung: Diese Vulnerability l"asst sich grunds"atzlich auch nutzen um beliebigen XHTML-Code einzuf"ugen.
+Nun wird bei jedem Benutzer, der diesen Post sieht, ein JS-Code ausgef"uhrt welcher vom (vertauensw"urdigen) Server zu kommen scheint.\newline
+Anmerkung: Diese Vulnerability l"asst sich grunds"atzlich auch nutzen um beliebigen XHTML-Code einzuf"ugen.\newline
+
+XSS-Vulnerabilities treten relativ h"aufig auf. Beispielsweise wurden sie auf Routern (\url{http://www.heise.de/security/meldung/Und-taeglich-gruesst-die-Router-Luecke-1846882.html}) oder auf Facebook (\url{http://www.heise.de/security/meldung/Facebook-schliesst-Cross-Site-Scripting-Luecken-1845343.html}) gefunden.
 
 \subsection{Lab1c - app2}
 
