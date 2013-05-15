@@ -73,29 +73,40 @@
 \section{Lab1a}
 
 \subsection{Vorgehensweise}
-Nachdem man sich in die Übungsumgebung einloggt, stehen einem keine Web Browsing Tools wie z.B. lynx, links o.ä. zu Verfügung. Deshalb muss man einen anderer Weg finden, die Homepage auf einem Rechner, der von außen erreichbar ist, zu sehen. Eine Möglichkeit wäre hier einen SSH Tunnel (Port Forwarding) zu bauen.
-\url{http://wiki.ubuntuusers.de/SSH#SSH-Tunnel}
-\url{http://blog.ch-becker.de/2011/02/20/ssh-tunnel-mit-linux/}
-(image 1)
-Wir haben folgenden Befehl ausgeführt um einen SSH Tunnel zu bauen:
-\begin{lstlisting}
-ssh -L 2008:192.168.20.100:8000 XXXXXXX@sela.inso.tuwien.ac.at -p 12345
-\end{lstlisting}
-Nachdem der Tunnel aufgebaut ist, kann man sich über diesen Port die Homepage auf dem veralteten Tomcat Server ansehen. Eingabe der URL \url{http://localhost:2008} bringt uns zur gewünschte Homepage.
-(image2)
+Nachdem man sich in die Übungsumgebung einloggt, stehen einem keine Web Browsing tools (wie zB. browsers, lynx, links o.ä.) zu Verfügung. Deshalb muss man einen anderer Weg finden, die Homepage auf einen Rechner, der von aussen erreichbar ist, zu sehen. Eine Möglichkeit wäre hier einen SSH Tunnel(Port Forwarding) zu bauen.
+\\ \url{http://wiki.ubuntuusers.de/SSH#SSH-Tunnel}
+\\ \url{http://blog.ch-becker.de/2011/02/20/ssh-tunnel-mit-linux/}
+\\
+\\Wir haben folgenden Befehl ausgeführt um einen SSH Tunnel zu bauen:
+\\ssh -L 2008:192.168.20.100:8000 XXXXXXX@sela.inso.tuwien.ac.at -p 12345
+\\Nachdem der Tunnel aufgebaut ist, kann man sich über diesen Port die Homepage auf dem veralteten Tomcat Server ansehen. Eingabe der URL \url{http://localhost:2008} bringt uns zur gewünschte Homepage. 
+(\hyperref[fig:image1]{siehe Abbildung~\ref*{fig:image1} auf Seite~\pageref*{fig:image1}}).
+\begin{figure}[h!]
+  \centering
+  \fbox{
+    \includegraphics[width=0.4\textwidth]{./imgs/image1.png}
+  }
+  \caption{Homepage auf 192.168.20.100:8000}
+  \label{fig:image1}
+\end{figure}
+\\
 Um herauszufinden um welche Version des Tomcat Server sich handelt, genügt es eine ungültigen Anfrage zum Webserver zu senden. Wenn man z.B. die Resource /wrong auffordert (unter http://localhost:2008/wrong), bekommt man eine Fehlermeldung und man erkennt leicht, dass es sich um einen Tomcat Server Version 6.0.16 handelt.
-(image3)
-Um den privaten Schlüssel für Benutzer walter zu bekommen, haben wir folgendes Befehl ausgeführt (siehe Schwachstellen und Angriff): \url{http://127.0.0.1:2008/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/home/walter/.ssh/id_rsa}
-Mit diesem Schlüssel haben wir einen SSH-Zugang auf dem Server. Wenn wir diesen Schlüssel in die Übungsumgebung kopieren, können wir uns einloggen.
-\begin{lstlisting}
-ssh -i id_rsa walter@192.168.20.100
-\end{lstlisting}
-oggen.
-(image4)
+(\hyperref[fig:image2]{siehe Abbildung~\ref*{fig:image2} auf Seite~\pageref*{fig:image2}}).
+\begin{figure}[h!]
+  \centering
+  \fbox{
+    \includegraphics[width=0.4\textwidth]{./imgs/image2.png}
+  }
+  \caption{Tomcat Version}
+  \label{fig:image2}
+\end{figure}
+\\
+Um den privaten Schlüssel für Benutzer walter zu bekommen, haben wir folgenden Befehl ausgeführt (siehe Schwachstellen und Angriff): \\\url{http://127.0.0.1:2008/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/home/walter/.ssh/id_rsa}
+\\Mit diesem Schlüssel haben wir einen SSH-Zugang auf dem Server.
 
 \subsection{Schwachstellen und Angriff}
-Unter \url{http://tomcat.apache.org/security-6.html} gibt es eine Liste der Tomcat-6.X.X Schwachstellen. Eine Liste der bekannten Schwachstellen für Tomcat-6.0.16 ist unter \url{http://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-887/version_id-56605/Apache-Tomcat-6.0.16.html} zu finden.
-Die einzige hier gelistete Schwachstelle, die es einem als Angreifer ermöglicht beliebige Dateien zu lesen, ist Remote UTF-8 Directory Traversal. Eine genaue Beschreibung und Spezifikation findet man unter \url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2938}. Dieses Problem tritt auf, wenn 'allowLinking' und 'URIencoding=UTF-8' im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis zB. die Tiefe 3 hat (z.B. /usr/local/wwwroot), kann man auf folgende Weise auf beliebige Daten zugreifen: \url{http://www.target.com/%c0%ae%c0%ae/%c0%ae%c0%ae/%c0%ae%c0%ae/foo/bar}. Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder 'allowLinking' zu deaktivieren oder 'URIencoding' nicht auf UTF-8 zu setzen. Noch besser wäre ein Upgrade auf eine neuere Version des Tomcat Server. In der Version 6.0.18 wurde dieses Problem behoben.
+Unter \url{http://tomcat.apache.org/security-6.html} gibt es eine Liste der Tomcat-6.X.X Schwachstellen. Eine Liste der bekannten Schwachstellen für Tomcat-6.0.16 ist unter \\ \url{http://www.cvedetails.com/vulnerability-list/vendor_id-45/product_id-887/version_id-56605/Apache-Tomcat-6.0.16.html} zu finden. Die einzige hier gelistete Schwachstelle, die es einem als Angreifer ermöglicht beliebige Dateien zu lesen, ist Remote UTF-8 Directory Traversal. Eine genaue Beschreibung und Spezifikation findet man unter \url{http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2008-2938}. \\ 
+Dieses Problem tritt auf, wenn \"allowLinking\" und \"URIencoding=UTF-8\" im Tomcat erlaubt sind. Der Grund dafür ist, dass JVM UTF-8-kodierte URLs nicht korrekt dekodiert. Wenn das webroot Verzeichnis zB. die Tiefe 3 hat (z.B. /usr/local/wwwroot), kann man auf folgende Weise auf beliebige Daten zugreifen: \\ http://www.target.com/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/\%c0\%ae\%c0\%ae/foo/bar   \\Eine mögliche Lösung um solche Angriffe zu vermeiden wäre entweder \"allowLinking\" zu deaktivieren oder \"URIencoding\" nicht auf UTF-8 zu setzen. Noch besser wäre ein Upgrade auf eine neuere Version des Tomcat Server. In der Version 6.0.18 wurde dieses Problem behoben. 
 
 
 \section{Lab1b}
@@ -114,7 +125,7 @@ Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod 
 Im App0 wurden folgende Vulnerabilities gefunden:
 \begin{description}
   \item[Integer und Heap-Buffer-Overflow] \hfill \\
-  	 Ein Integer-Overflow ist das Ergebnis einer Operation (Addition, Subtraktion, ...), bei der der Wertebereich der Variable überschritten wird.
+  	 Ein Integer-Overflow ist das Ergebnis einer Operation (Addition, Subtraktion, ...), bei der der Wertebereich der Variable überschritten wird.\newline
   	 Ein Heap-Buffer-Overflow bezeichnet den Zugriff außerhalb der Grenzen des allozierten Speichers. Beispielsweise:
   	 \begin{lstlisting}
 var=malloc(10);
@@ -126,6 +137,8 @@ var[11]=5;
     Dieser Bug f"uhrt in weiter folge zu einem Heap-Buffer-Overflow, da i weit "uber MAX wachsen kann.\newline
     Diese beiden Overflows befinden sich in der Funktion strip (Zeile 12). Sie lassen sich durch eine leere Eingabe ausl"osen (da strlen dann 0 zur"uckliefert).
     Diese Vulnerability kann in dem Fall f"ur ein DOS genutzt werden.
+    Eine solche Heap Overflow Schwachstelle wurde in Oracle Java JRE \& JDK 7u7 und vorherigen Versionen gefunden. Die Schwachstelle befindet sich in \"t2k.dll\", genauer in \"maxCountPoint\" eines Fonts, und k"onnte von einem Angreifer durch eine spezielle Webseite ausgen"utzt werden. Diese Schwachstelle ist kritisch und hat den h"ochsten CVSS Score, n"amlich 10.\newline
+    Quelle: \url{http://seclists.org/bugtraq/2012/Oct/119}
     
   \item[Format-String] \hfill \\
   In der Funktion outprint (Zeile 54) wird der vom User eingegebene String als Format-String an printf "ubergeben.
@@ -135,21 +148,46 @@ var[11]=5;
         \item Zur CPU-Archtektur passenden Format-Offset zum oberem addieren, um die Adresse einer Stack-Frame zu erhalten.
         \item Aus dem Frame-Pointer, durch die CPU-Archektur und Compiler bestimmt, den Offset f"ur RIP auf dem Stack bestimmen.
         \item Durch den Format-Offset und den Stack-Frame-Pointer l"asst sich die Adresse des input-Buffers bestimmen.
-        \item Aus diesen Daten kann der String f"ur den Angriff generiert werden:\\
+        \item Aus diesen Daten kann der String für den Angriff generiert werden:\\
         \begin{lstlisting}
 ${ripAdresse}$(($inputBufferAdresse-2*$Adresslaenge))${shellCode}%${formatOffset}\$n
         \end{lstlisting}
     \end{itemize}
-    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der oberige String ist in einer bash-"ahnlichen Syntax
+    Anm.: Dieser Angriff funkioniert auch auf Systemen mit ASLR. Der obere String ist in einer bash-"ahnlichen Syntax
     
-    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).
+    Durch \%s, ließe sich diese Technik auch zum Lesen vom Speicher nutzen (wobei dies nat"urlich nur bis zum n"achsten \textbackslash0 geht).\newline
+
     \item[Memory Leak]
-    Da der in strip allokierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).
+    Da der in strip allozierte Speicher nie freigegeben wird, wird ab einem Zeitpunkt kein freier Speicher am Heap zur Verfügung stehen. Da malloc in diesem Fall meist NULL liefert, wird das Programm, beim Versuch diese Adresse zu dereferenzieren, terminiert (DOS-Angriff).\newline
+    Im SNMP Module des Cisco IOS XR wurde eine Schwachstelle entdeckt, die es einem Angreifer erm"oglicht durch speziell angefertige SNMP Packete einen Memory Leak auszul"osen. Die Schwachstelle entsteht dadurch, dass der Input nicht genug "Uberpr"uft wird. Der SNMP Prozess startet neu, sobald der ihm zugeteilte Speicher voll ist. Diese Schwachstelle wurde als eher gering gef"ahrlich eingestuft.\newline
+    Quelle: \url{http://tools.cisco.com/security/center/content/CiscoSecurityNotice/CVE-2013-1216}
 \end{description}
 
 \subsection{Lab1c - app1}
 
 \subsection{Lab1c - app2}
+
+In app2 wurde eine \textit{weak session id}-L"ucke gefunden, die es einem Angreifer erlauben w"urde, die aktuelle Session-ID eines angemeldeten Nutzers zu erraten bzw. errechnen und an den Server zu senden. Dieser nimmt nun an, mit den tatsächlichen Nutzer zu kommunizieren, da die ID als Geheimnis nur zwischen Server und Nutzer bekannt sein sollte, eine weitere Authentifizierung (z.B. anhand der IP-Adresse) findet nicht statt.
+
+Die Lücke ist in der Datei \texttt{src/functions.php} innerhalb der Funktion \texttt{make\_new\_session()}, in der die Session-ID auf folgende Weise erzeugt wird (Zeile 87): \lstinline{$sessionid = md5($time."|".$this->data["username"]);}
+
+Die Applikation erzeugt aus der aktuellen Unix-Zeit des Servers verkettet mit dem Nutzernamen einen MD5-Hash, der anschließend als Session-ID verwendet wird. Sowohl Server-Zeit als auch Benutzernamen werden allen Besuchern der Applikation auf der Hauptseite angezeigt - ein Angreifer muss nur die Unix-Zeit bei der Anmeldung des Ziel-Benutzers erraten, in dem von der aktuellen Zeit der Wert in Minuten seit der letzten Anmeldung subtrahiert wird (auch diese Information wird unn"otigerweise allen Besuchern gezeigt). Durch Ausprobieren verschiedener Verkettungs-Zeichen, Reihenfolgen und anschließendem Hashing kann der Angreifer letztendlich an die Session ID gelangen und hat Zugriff auf das Profil des Benutzers ohne dass ein Passwort etc. notwendig ist - selbst die Verschlüsselung der Kommunikation zwischen Benutzer und Server ist bei dieser Art des Angriffs wirkungslos.
+
+Konkret müssen also folgende Schritte durchgeführt werden, um die Session eines Nutzers zu kapern:
+
+\begin{itemize}
+\item Aufruf der Hauptseite und Extraktion eines Benutzernamens, der verstrichenen Zeit seit der dessen Anmeldung und die Serverzeit
+\item Rückrechnen der Systemzeit bei der Anmeldung des Benutzers, wobei eine gewisse Toleranz ber"ucksichtigt wird
+\item Schrittweise Erzeugung einer Session-ID durch iterative Auswahl einer Systemzeit aus dem Toleranzintervall verkettet mit \texttt{|} und dem Benutzernamen, sowie anschließendem Hashing mit MD5.
+\item Die erzeugte Session-ID wird dem Server innerhalb einer Anfrage übermittelt - ist sie ung"ultig, erh"alt der Angreifer nur eine Gast-Seite, bei Akzeptanz durch den Server wird die benutzer-spezifische Seite "ubermittelt und der Angriff war erfolgreich.
+\end{itemize}
+
+Um den Fehler zu beheben, kann statt der durch die Applikation selbst implementierten Session-Mechanik auf die als resistent geltenden Implementierungen des Frameworks bzw. der Sprache zur"uckgegriffen werden, in Beispiel von PHP etwa durch die Funktionen \texttt{session\_start}, \texttt{session\_id} etc. Stattdessen kann die Erzeugung der Session-ID auch abgesichert werden, indem die Informationen, die in die Erzeugung einfließen, nur dem betreffenden Nutzer selbst angezeigt werden oder zuf"allige Faktoren einfließen, die ein Angreifer nicht in realistischer Weise erraten kann - beispielsweise durch den Server generierte Pseudozufallszahlen kombiniert mit der Serverzeit. 
+
+In unserer korrigierten Version wird zur Erzeugung der Session-ID ausschließlich eine Zufallszahl verwendet, die anschließend wieder verworfen wird: \lstinline{$sessionid = md5(rand());} Ein Angreifer hat keine M"oglichkeit, von außen an die Zufallszahl zu gelangen und der hohe m"ogliche Wertebereich verhindert ein Erraten der Zahl durch simples Ausprobieren. Zu beachten bei der Verwendung von Pseudo-Zufallszahlen ist eine m"oglichst hohe Entropie bei der Wahl des Initialisierungswertes, da sich s"amtliche erzeugte Zufallszahlen berechnen lassen, wenn ein Angreifer diesen Wert erraten kann.
+
+Es wurde neben anderen kritischen Schwachstellen auch eine kritische Weak Session ID Schwachstelle in Cisco Unified Videoconferencing 3515,3522,3527,5230,3545,5110,5115 Systemen gefunden. Session IDs sind auf diesen Systemen die Timestamps zu denen sich die Benutzer eingeloggt haben und sind trivial nachzubauen. Diese Timestamps herauszufinden ist z.B. "uber RPC m"oglich. Durch diese Schwachstelle kann sich ein unauthentifizierter Angreifer am System authentifizieren.\newline
+Quelle: \url{http://seclists.org/fulldisclosure/2010/Nov/167}
 
 \section{Beispiele}
 
